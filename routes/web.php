@@ -47,7 +47,56 @@ Route::name('admin.')->prefix('admin')->group(function () {
 
         Route::post('profile', [AdminAuthController::class, 'updateAdminProfile'])->name('update.profile');
 
+        // Sales Persons CRUD
+        Route::get('salespersons-table', [\App\Http\Controllers\Admin\SalesPersonController::class, 'getTable'])->name('salespersons.table');
+        Route::post('salespersons/{id}/toggle-status', [\App\Http\Controllers\Admin\SalesPersonController::class, 'toggleStatus'])->name('salespersons.toggle-status');
+        Route::get('salespersons-export', [\App\Http\Controllers\Admin\SalesPersonController::class, 'exportExcel'])->name('salespersons.export');
+        Route::resource('salespersons', \App\Http\Controllers\Admin\SalesPersonController::class)->names([
+            'index' => 'salespersons.index',
+            'store' => 'salespersons.store',
+            'show' => 'salespersons.show',
+            'update' => 'salespersons.update',
+            'destroy' => 'salespersons.destroy',
+        ]);
 
+        // Area Master CRUD
+        Route::get('areamaster-table', [\App\Http\Controllers\Admin\AreaMasterController::class, 'getTable'])->name('areamaster.table');
+        Route::post('areamaster/{id}/toggle-status', [\App\Http\Controllers\Admin\AreaMasterController::class, 'toggleStatus'])->name('areamaster.toggle-status');
+        Route::get('areamaster-export', [\App\Http\Controllers\Admin\AreaMasterController::class, 'exportExcel'])->name('areamaster.export');
+        Route::resource('areamaster', \App\Http\Controllers\Admin\AreaMasterController::class)->names([
+            'index' => 'areamaster.index',
+            'store' => 'areamaster.store',
+            'show' => 'areamaster.show',
+            'update' => 'areamaster.update',
+            'destroy' => 'areamaster.destroy',
+        ]);
+
+        // Properties CRUD
+        Route::get('properties-table', [\App\Http\Controllers\Admin\PropertyController::class, 'getTable'])->name('properties.table');
+        Route::post('properties/{id}/toggle-status', [\App\Http\Controllers\Admin\PropertyController::class, 'toggleStatus'])->name('properties.toggle-status');
+        Route::get('properties-export', [\App\Http\Controllers\Admin\PropertyController::class, 'exportExcel'])->name('properties.export');
+        Route::resource('properties', \App\Http\Controllers\Admin\PropertyController::class)->names([
+            'index' => 'properties.index',
+            'store' => 'properties.store',
+            'show' => 'properties.show',
+            'update' => 'properties.update',
+            'destroy' => 'properties.destroy',
+        ]);
+
+        // Customers CRUD
+        Route::get('customers-table', [\App\Http\Controllers\Admin\CustomerController::class, 'getTable'])->name('customers.table');
+        Route::get('customers/{id}/assign-properties', [\App\Http\Controllers\Admin\CustomerController::class, 'assignProperties'])->name('customers.assign-properties');
+        Route::post('customers/{id}/toggle-property', [\App\Http\Controllers\Admin\CustomerController::class, 'toggleProperty'])->name('customers.toggle-property');
+        Route::post('customers/{id}/send-whatsapp', [\App\Http\Controllers\Admin\CustomerController::class, 'sendWhatsapp'])->name('customers.send-whatsapp');
+        Route::post('customers/{id}/toggle-status', [\App\Http\Controllers\Admin\CustomerController::class, 'toggleStatus'])->name('customers.toggle-status');
+        Route::get('customers-export', [\App\Http\Controllers\Admin\CustomerController::class, 'exportExcel'])->name('customers.export');
+        Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class)->names([
+            'index' => 'customers.index',
+            'store' => 'customers.store',
+            'show' => 'customers.show',
+            'update' => 'customers.update',
+            'destroy' => 'customers.destroy',
+        ]);
     });
 
 });
@@ -55,6 +104,4 @@ Route::name('admin.')->prefix('admin')->group(function () {
 Route::middleware(['auth'])->group(function () {
 
 });
-
-
 

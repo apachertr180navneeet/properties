@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\SalesPerson;
 use App\Models\Property;
 use App\Models\Customer;
+use App\Models\AreaMaster;
 
 class DemoDataSeeder extends Seeder
 {
@@ -13,15 +14,15 @@ class DemoDataSeeder extends Seeder
     {
         $persons = [];
         $names = [
-            ['name' => 'Rahul Sharma', 'email' => 'rahul@example.com', 'phone' => '9876543210'],
-            ['name' => 'Priya Patel', 'email' => 'priya@example.com', 'phone' => '9876543211'],
-            ['name' => 'Amit Singh', 'email' => 'amit@example.com', 'phone' => '9876543212'],
-            ['name' => 'Sneha Reddy', 'email' => 'sneha@example.com', 'phone' => '9876543213'],
-            ['name' => 'Vikram Joshi', 'email' => 'vikram@example.com', 'phone' => '9876543214'],
+            ['name' => 'Kamlesh', 'email' => 'kamlesh@example.com', 'phone' => '1234567890', 'city' => 'Jodhpur', 'status' => 'active'],
+            ['name' => 'Akshay', 'email' => 'akshay@example.com', 'phone' => '1234567890', 'city' => 'Barmer', 'status' => 'active'],
+            ['name' => 'Rahul Sharma', 'email' => 'rahul@example.com', 'phone' => '9876543210', 'city' => 'Jodhpur', 'status' => 'active'],
+            ['name' => 'Priya Patel', 'email' => 'priya@example.com', 'phone' => '9876543211', 'city' => 'Mumbai', 'status' => 'active'],
+            ['name' => 'Amit Singh', 'email' => 'amit@example.com', 'phone' => '9876543212', 'city' => 'Delhi', 'status' => 'inactive'],
         ];
 
         foreach ($names as $data) {
-            $persons[] = SalesPerson::firstOrCreate(['email' => $data['email']], $data);
+            $persons[] = SalesPerson::updateOrCreate(['email' => $data['email']], $data);
         }
 
         $propertyData = [
@@ -62,6 +63,12 @@ class DemoDataSeeder extends Seeder
                 ['email' => $data['email']],
                 array_merge($data, ['sales_person_id' => $persons[$i % count($persons)]->id])
             );
+        }
+
+        $areaNames = ['Andheri West', 'Banjara Hills', 'Connaught Place', 'Whitefield', 'Marine Drive', 'Koregaon Park', 'Greater Kailash', 'Salt Lake', 'Electronic City', 'Alibaug'];
+
+        foreach ($areaNames as $name) {
+            AreaMaster::firstOrCreate(['area_name' => $name]);
         }
     }
 }
