@@ -19,6 +19,7 @@ class Customer extends Model
         'base_requirement',
         'visit_date',
         'whatsapp_count',
+        'messaging',
         'status',
     ];
 

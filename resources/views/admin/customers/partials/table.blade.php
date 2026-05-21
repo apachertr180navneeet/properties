@@ -7,8 +7,8 @@
                 <th>City</th>
                 <th>Sales Person</th>
                 <th>Visit Date</th>
-                <th>Whatsapp</th>
-                <th>Btn</th>
+                <th>Msg Count</th>
+                <th>WhatsApp Service</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -25,9 +25,15 @@
                         <span class="whatsapp-count-{{ $customer->id }} fw-semibold">{{ $customer->whatsapp_count }}</span>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-primary action-btn-edit" onclick="sendWhatsapp({{ $customer->id }})">
-                            {{ $customer->whatsapp_count > 0 ? 'Stop' : 'Start' }}
-                        </button>
+                        @if($customer->messaging === 'start')
+                            <button type="button" class="btn btn-sm btn-outline-danger action-btn-delete" onclick="sendWhatsapp({{ $customer->id }})" title="Stop WhatsApp Service">
+                                <i class="bx bx-stop-circle"></i> Stop
+                            </button>
+                        @else
+                            <button type="button" class="btn btn-sm btn-outline-success action-btn-edit" onclick="sendWhatsapp({{ $customer->id }})" title="Start WhatsApp Service">
+                                <i class="bx bx-play-circle"></i> Start
+                            </button>
+                        @endif
                     </td>
                     <td>
                         <label class="premium-switch">

@@ -109,8 +109,9 @@ class CustomerController extends Controller
             $sheet->setCellValue('D1', 'City');
             $sheet->setCellValue('E1', 'Sales Person');
             $sheet->setCellValue('F1', 'Visit Date');
-            $sheet->setCellValue('G1', 'Whatsapp Count');
-            $sheet->setCellValue('H1', 'Status');
+            $sheet->setCellValue('G1', 'Msg Count');
+            $sheet->setCellValue('H1', 'Messaging');
+            $sheet->setCellValue('I1', 'Status');
 
             $row = 2;
             foreach ($customers as $i => $customer) {
@@ -121,7 +122,8 @@ class CustomerController extends Controller
                 $sheet->setCellValue('E' . $row, optional($customer->salesPerson)->name);
                 $sheet->setCellValue('F' . $row, optional($customer->visit_date)->format('d/m/Y'));
                 $sheet->setCellValue('G' . $row, $customer->whatsapp_count);
-                $sheet->setCellValue('H' . $row, ucfirst($customer->status));
+                $sheet->setCellValue('H' . $row, ucfirst($customer->messaging));
+                $sheet->setCellValue('I' . $row, ucfirst($customer->status));
                 $row++;
             }
 
@@ -154,15 +156,26 @@ class CustomerController extends Controller
     {
         try {
             $customer = Customer::findOrFail($id);
-            $customer->increment('whatsapp_count');
+            
+            if ($customer->messaging === 'start') {
+                $customer->messaging = 'stop';
+                $message = 'WhatsApp service stopped successfully.';
+            } else {
+                $customer->messaging = 'start';
+                $customer->increment('whatsapp_count');
+                $message = 'WhatsApp service started successfully.';
+            }
+            
+            $customer->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'WhatsApp count updated.',
+                'message' => $message,
+                'status' => $customer->messaging,
                 'count' => $customer->whatsapp_count,
             ]);
         } catch (Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error updating WhatsApp count.'], 500);
+            return response()->json(['success' => false, 'message' => 'Error updating WhatsApp service status.'], 500);
         }
     }
 
@@ -172,7 +185,12 @@ class CustomerController extends Controller
             $customer = Customer::with('properties')->findOrFail($id);
             $assignedIds = $customer->properties->pluck('id')->toArray();
 
-            $query = Property::query()->with('salesPerson');
+            $query = Property::query()
+                ->where(function ($q) use ($assignedIds) {
+                    $q->where('status', 'available')
+                      ->orWhereIn('id', $assignedIds);
+                })
+                ->with('salesPerson');
 
             if ($request->filled('search')) {
                 $search = $request->search;
