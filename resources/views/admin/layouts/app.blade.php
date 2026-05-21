@@ -25,7 +25,27 @@
         <link rel="stylesheet" href="{{asset('assets/admin/css/sweet-alert.css')}}" />
         @yield('style')
         <style>
-            
+            /* === Mobile Responsive Tweaks === */
+            @media (max-width: 575.98px) {
+                .container-p-y { padding-left: .75rem !important; padding-right: .75rem !important; }
+                .welcome-section { padding: 1.25rem !important; }
+                .welcome-section h4 { font-size: 1.1rem; }
+                .welcome-section p { font-size: .85rem; }
+            }
+            @media (max-width: 767.98px) {
+                .dashboard-card { min-height: 170px !important; padding: 1.25rem 1rem !important; }
+                .dashboard-card h4 { font-size: 1rem; }
+                .dashboard-card h3 { font-size: 1.5rem; }
+                .dashboard-card .card-icon { width: 44px; height: 44px; font-size: 1.25rem; }
+                .dashboard-card .card-bg-icon { font-size: 4rem !important; }
+                .layout-menu-fixed .layout-page { padding-top: 56px !important; }
+            }
+            @media (max-width: 575.98px) {
+                .card-body { padding: 1rem !important; }
+                .app-brand-text { font-size: 1.25rem !important; }
+            }
+            html { overflow-x: hidden; }
+            body { overflow-x: hidden; }
         </style>
         
     </head>

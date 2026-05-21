@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\SalesPerson;
+use App\Models\Property;
+use App\Models\Customer;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Mail, DB, Hash, Validator, Session, File,Exception;
@@ -269,7 +272,20 @@ class AdminAuthController extends Controller
 
     public function adminDashboard()
     {
-        return view("admin.dashboard.index");
+        $totalUsers = User::where('role', 'user')->count();
+        $activeUsers = User::where('role', 'user')->where('status', 'active')->count();
+        $newUsers = User::where('role', 'user')->whereMonth('created_at', now()->month)->count();
+        $recentUsers = User::where('role', 'user')->orderBy('id', 'desc')->take(5)->get();
+        $totalSalesPersons = SalesPerson::count();
+        $totalProperties = Property::count();
+        $totalCustomers = Customer::count();
+        $propertiesBySalesperson = Property::selectRaw('sales_person_id, count(*) as total')->groupBy('sales_person_id')->with('salesPerson')->get();
+        $customersBySalesperson = Customer::selectRaw('sales_person_id, count(*) as total')->groupBy('sales_person_id')->with('salesPerson')->get();
+        return view("admin.dashboard.index", compact(
+            'totalUsers', 'activeUsers', 'newUsers', 'recentUsers',
+            'totalSalesPersons', 'totalProperties', 'totalCustomers',
+            'propertiesBySalesperson', 'customersBySalesperson'
+        ));
     }
 
 

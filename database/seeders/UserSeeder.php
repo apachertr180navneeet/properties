@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        User::firstOrCreate(['email' => 'projectadmin@mailinator.com'], [
             'first_name' => "Project",
             'last_name' => "Admin",
             'full_name' => "Project Admin",

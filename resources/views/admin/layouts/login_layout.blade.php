@@ -21,7 +21,14 @@
         <script src="{{asset('assets/admin/vendor/js/helpers.js')}}"></script>
         <script src="{{asset('assets/admin/js/config.js')}}"></script>
         @yield('style')
-        
+        <style>
+            @media (max-width: 575.98px) {
+                .authentication-wrapper { padding-left: 1rem !important; padding-right: 1rem !important; }
+                .card-body { padding: 1.25rem !important; }
+                .app-brand-text { font-size: 1.25rem !important; }
+                h4.mb-2 { font-size: 1.15rem; }
+            }
+        </style>
     </head>
     <body>
         <div class="container-xxl">
