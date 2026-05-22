@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
+Route::get('/properties/{id}', [HomeController::class, 'show'])->name('properties.show');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::name('admin.')->prefix('admin')->group(function () {
@@ -84,7 +85,19 @@ Route::name('admin.')->prefix('admin')->group(function () {
         ]);
 
         // Customers CRUD
+        // Message Templates CRUD
         Route::get('customers-table', [\App\Http\Controllers\Admin\CustomerController::class, 'getTable'])->name('customers.table');
+        // Message Templates routes
+        Route::get('message-templates-table', [\App\Http\Controllers\Admin\MessageTemplateController::class, 'getTable'])->name('message-templates.table');
+        Route::post('message-templates/{id}/toggle-status', [\App\Http\Controllers\Admin\MessageTemplateController::class, 'toggleStatus'])->name('message-templates.toggle-status');
+        Route::get('message-templates-export', [\App\Http\Controllers\Admin\MessageTemplateController::class, 'exportExcel'])->name('message-templates.export');
+        Route::resource('message-templates', \App\Http\Controllers\Admin\MessageTemplateController::class)->names([
+            'index'   => 'message-templates.index',
+            'store'   => 'message-templates.store',
+            'show'    => 'message-templates.show',
+            'update'  => 'message-templates.update',
+            'destroy' => 'message-templates.destroy',
+        ]);
         Route::get('customers/{id}/assign-properties', [\App\Http\Controllers\Admin\CustomerController::class, 'assignProperties'])->name('customers.assign-properties');
         Route::post('customers/{id}/toggle-property', [\App\Http\Controllers\Admin\CustomerController::class, 'toggleProperty'])->name('customers.toggle-property');
         Route::post('customers/{id}/send-whatsapp', [\App\Http\Controllers\Admin\CustomerController::class, 'sendWhatsapp'])->name('customers.send-whatsapp');
@@ -104,4 +117,5 @@ Route::name('admin.')->prefix('admin')->group(function () {
 Route::middleware(['auth'])->group(function () {
 
 });
+
 

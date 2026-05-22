@@ -43,5 +43,11 @@
 				<div data-i18n="Customers">Customers</div>
 			</a>
 		</li>
+		<li class="menu-item {{ request()->is('admin/message-templates*') ? 'active' : ''}}">
+			<a href="{{route('admin.message-templates.index')}}" class="menu-link">
+				<i class="menu-icon tf-icons bx bx-message-detail"></i>
+				<div data-i18n="Message Templates">Message Templates</div>
+			</a>
+		</li>
 	</ul>
 </aside>
