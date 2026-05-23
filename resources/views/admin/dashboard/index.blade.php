@@ -100,7 +100,7 @@
                 <i class="bx bx-building-house card-bg-icon"></i>
                 <div class="card-text">
                     <h4>Sales Person V/s Property</h4>
-                    <h3>10</h3>
+                    <h3>{{ $totalProperties }}</h3>
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
                 <i class="bx bx-group card-bg-icon"></i>
                 <div class="card-text">
                     <h4>Sales Person V/s Customers</h4>
-                    <h3>10</h3>
+                    <h3>{{ $totalCustomers }}</h3>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@
                 <i class="bx bx-trending-up card-bg-icon"></i>
                 <div class="card-text">
                     <h4>Property V/s Customers</h4>
-                    <h3>10</h3>
+                    <h3>{{ $propertyCustomerAssignments }}</h3>
                 </div>
             </div>
         </div>

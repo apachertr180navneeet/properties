@@ -281,10 +281,12 @@ class AdminAuthController extends Controller
         $totalCustomers = Customer::count();
         $propertiesBySalesperson = Property::selectRaw('sales_person_id, count(*) as total')->groupBy('sales_person_id')->with('salesPerson')->get();
         $customersBySalesperson = Customer::selectRaw('sales_person_id, count(*) as total')->groupBy('sales_person_id')->with('salesPerson')->get();
+        $propertyCustomerAssignments = DB::table('customer_property')->count();
         return view("admin.dashboard.index", compact(
             'totalUsers', 'activeUsers', 'newUsers', 'recentUsers',
             'totalSalesPersons', 'totalProperties', 'totalCustomers',
-            'propertiesBySalesperson', 'customersBySalesperson'
+            'propertiesBySalesperson', 'customersBySalesperson',
+            'propertyCustomerAssignments'
         ));
     }
 
