@@ -510,19 +510,49 @@
                     </div>
                     <div class="property-detail-row">
                         <i class="bx bx-user"></i>
-                        <span class="detail-value">{{ optional($property->salesPerson)->name ?? '-' }}</span>
+                        <span class="detail-value">{{ $property->salesPersons->count() ? $property->salesPersons->pluck('name')->implode(', ') : '-' }}</span>
                     </div>
+
+                    @if($isAssigned && isset($showings[$property->id]))
+                        <div class="mt-2 pt-2" style="border-top: 1px dashed #e4e6fc;">
+                            <div style="font-size: 0.75rem; font-weight: 600; color: #696cff; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px;">
+                                <i class="bx bx-history"></i> Showings
+                            </div>
+                            @foreach($showings[$property->id] as $showing)
+                                <div style="font-size: 0.78rem; color: #475569; display: flex; align-items: center; gap: 6px; padding: 2px 0;">
+                                    <i class="bx bx-user-circle" style="color: #94a3b8;"></i>
+                                    <span>{{ $showing->salesPerson->name ?? '-' }}</span>
+                                    <span style="color: #94a3b8;">&middot;</span>
+                                    <span>{{ $showing->show_date->format('d M Y') }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
                 <div class="property-card-footer">
-                    <span class="property-status-badge {{ $statusColor }}">
-                        {{ ucfirst($property->status ?? 'available') }}
-                    </span>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="property-status-badge {{ $statusColor }}">
+                            {{ ucfirst($property->status ?? 'available') }}
+                        </span>
+                        @if($isAssigned)
+                            @php
+                                $assignedSPs = $propertySalesPersons[$property->id] ?? collect();
+                            @endphp
+                            <button type="button" class="btn btn-sm btn-outline-primary show-property-btn"
+                                    data-property-id="{{ $property->id }}"
+                                    data-property-title="{{ $property->title }}"
+                                    data-sales-persons='{{ $assignedSPs->map(fn($sp) => ["id" => $sp->id, "name" => $sp->name])->toJson() }}'
+                                    style="border-radius: 6px; font-size: 0.75rem; padding: 0.2rem 0.6rem;">
+                                <i class="bx bx-show"></i> Show
+                            </button>
+                        @endif
+                    </div>
                     <label class="assign-switch" onclick="event.stopPropagation()">
                         <input type="checkbox"
                                class="toggle-property"
                                data-property-id="{{ $property->id }}"
-                               {{ $isAssigned ? 'checked' : '' }}>
+                               {{ $isAssigned ? 'checked disabled' : '' }}>
                         <span class="assign-switch-track"></span>
                         <span class="assign-switch-label">{{ $isAssigned ? 'Assigned' : 'Assign' }}</span>
                     </label>
@@ -544,6 +574,42 @@
     @endif
 </div>
 @endsection
+
+<!-- Showing Modal -->
+<div class="modal fade" id="showingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 14px; border: none; box-shadow: 0 12px 40px rgba(0,0,0,0.12);">
+            <div class="modal-header" style="border-bottom: 1px solid #f0f2f9; padding: 1rem 1.25rem;">
+                <h6 class="modal-title fw-bold" style="color: #2b2b4a;">
+                    <i class="bx bx-show" style="color: #696cff;"></i> Record Showing
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="showing-form">
+                <div class="modal-body" style="padding: 1.25rem;">
+                    <p id="showing-property-title" class="text-muted mb-3" style="font-size: 0.9rem;"></p>
+                    <input type="hidden" name="property_id" id="showing-property-id">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size: 0.85rem; color: #435971;">Sales Person</label>
+                        <select name="sales_person_id" id="showing-sales-person" class="form-select" required style="border-radius: 8px; border-color: #e4e6fc;">
+                            <option value="">— Select —</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label fw-semibold" style="font-size: 0.85rem; color: #435971;">Show Date</label>
+                        <input type="date" name="show_date" id="showing-date" class="form-control" value="{{ date('Y-m-d') }}" required style="border-radius: 8px; border-color: #e4e6fc;">
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #f0f2f9; padding: 0.85rem 1.25rem;">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius: 8px; font-size: 0.85rem;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="showing-submit" style="border-radius: 8px; font-size: 0.85rem;">
+                        <i class="bx bx-check"></i> Record
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section('script')
 <script>
@@ -569,6 +635,77 @@
         });
         document.getElementById('filter-assignment').addEventListener('change', function() {
             document.getElementById('filter-form').submit();
+        });
+
+        // Show Property button - open modal
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.show-property-btn');
+            if (!btn) return;
+
+            const propertyId = btn.dataset.propertyId;
+            const propertyTitle = btn.dataset.propertyTitle;
+            const sps = JSON.parse(btn.dataset.salesPersons || '[]');
+
+            document.getElementById('showing-property-id').value = propertyId;
+            document.getElementById('showing-property-title').textContent = 'Property: ' + propertyTitle;
+            document.getElementById('showing-date').value = new Date().toISOString().split('T')[0];
+
+            // Populate dropdown with only assigned sales persons
+            const select = document.getElementById('showing-sales-person');
+            select.innerHTML = '<option value="">— Select —</option>';
+            sps.forEach(function(sp) {
+                const opt = document.createElement('option');
+                opt.value = sp.id;
+                opt.textContent = sp.name;
+                select.appendChild(opt);
+            });
+
+            const modal = new bootstrap.Modal(document.getElementById('showingModal'));
+            modal.show();
+        });
+
+        // Submit showing form
+        document.getElementById('showing-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('showing-submit');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Saving...';
+
+            const formData = new FormData(this);
+            const propertyId = formData.get('property_id');
+
+            fetch('/admin/customers/{{ $customer->id }}/store-showing', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+            .then(r => r.json())
+            .then(res => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bx bx-check"></i> Record';
+
+                if (res.success) {
+                    const modalEl = document.getElementById('showingModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+
+                    showToast(res.message, 'success');
+
+                    // Reload page to show updated showings
+                    setTimeout(() => location.reload(), 800);
+                } else {
+                    showToast(res.message || 'Error recording showing.', 'error');
+                }
+            })
+            .catch(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bx bx-check"></i> Record';
+                showToast('Error recording showing.', 'error');
+            });
         });
 
         // Toggle property assignment
@@ -613,11 +750,14 @@
                             ribbon.textContent = 'ASSIGNED';
                             card.insertBefore(ribbon, card.firstChild);
                         }
+                        // Reload to add showing section
+                        setTimeout(() => location.reload(), 500);
                     } else {
                         card.classList.remove('is-assigned');
                         label.textContent = 'Assign';
                         const ribbon = document.getElementById('ribbon-' + propertyId);
                         if (ribbon) ribbon.remove();
+                        setTimeout(() => location.reload(), 500);
                     }
                 } else {
                     checkbox.checked = !checkbox.checked;

@@ -25,8 +25,13 @@
 @section('script')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $('#location, #sales_person_id').select2({
+    $('#location').select2({
         placeholder: '— Select —',
+        allowClear: true,
+        width: '100%'
+    });
+    $('#sales_person_ids').select2({
+        placeholder: '— Select Sales Persons —',
         allowClear: true,
         width: '100%'
     });
