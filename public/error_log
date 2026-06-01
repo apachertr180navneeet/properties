@@ -1,2 +1,0 @@
-[22-May-2026 11:36:49 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home2/govtcollege/public_html/properties/app/Http/Controllers/Web/HomeController.php on line 3
-[23-May-2026 11:06:05 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home2/govtcollege/public_html/properties/app/Http/Controllers/Admin/AdminAuthController.php on line 3
