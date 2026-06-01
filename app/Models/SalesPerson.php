@@ -16,7 +16,7 @@ class SalesPerson extends Model
 
     public function properties()
     {
-        return $this->hasMany(Property::class);
+        return $this->belongsToMany(Property::class, 'property_sales_person');
     }
 
     public function customers()

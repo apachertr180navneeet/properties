@@ -36,4 +36,9 @@ class Customer extends Model
     {
         return $this->belongsToMany(Property::class)->withTimestamps();
     }
+
+    public function showings()
+    {
+        return $this->hasMany(PropertyShowing::class);
+    }
 }
