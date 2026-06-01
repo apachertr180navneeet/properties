@@ -4,12 +4,8 @@
             <tr>
                 <th style="width: 60px;">S.No.</th>
                 <th>Name</th>
-                <th>Owner</th>
                 <th>Type</th>
-                <th>Build</th>
-                <th>Condition</th>
                 <th>City</th>
-                <th>Facing</th>
                 <th>Amount</th>
                 <th>Sales Person</th>
                 <th>Status</th>
@@ -25,12 +21,8 @@
                     <td>
                         <span class="fw-semibold text-dark">{{ $property->title }}</span>
                     </td>
-                    <td>{{ $property->owner_name ?? '-' }}</td>
                     <td>{{ $property->property_type ?? '-' }}</td>
-                    <td>{{ $property->build_type ?? '-' }}</td>
-                    <td>{{ $property->property_condition ?? '-' }}</td>
                     <td>{{ $property->city ?? '-' }}</td>
-                    <td>{{ $property->facing ?? '-' }}</td>
                     <td>
                         @if($property->price)
                             {{ rtrim(rtrim(number_format($property->price / 100000, 2), '0'), '.') }}L
@@ -38,7 +30,7 @@
                             -
                         @endif
                     </td>
-                    <td>{{ $property->salesPersons->count() ? $property->salesPersons->pluck('name')->implode(', ') : '-' }}</td>
+                    <td>{{ optional($property->salesPerson)->name ?? '-' }}</td>
                     <td>
                         <div class="d-flex gap-1 status-toggle-group" data-id="{{ $property->id }}">
                             @foreach(['available', 'sold', 'pending'] as $st)
@@ -71,7 +63,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="12" class="text-center py-5 text-muted">
+                    <td colspan="7" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No properties found matching the search criteria.
                     </td>

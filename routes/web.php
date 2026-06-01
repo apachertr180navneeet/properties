@@ -100,7 +100,6 @@ Route::name('admin.')->prefix('admin')->group(function () {
         ]);
         Route::get('customers/{id}/assign-properties', [\App\Http\Controllers\Admin\CustomerController::class, 'assignProperties'])->name('customers.assign-properties');
         Route::post('customers/{id}/toggle-property', [\App\Http\Controllers\Admin\CustomerController::class, 'toggleProperty'])->name('customers.toggle-property');
-        Route::post('customers/{id}/store-showing', [\App\Http\Controllers\Admin\CustomerController::class, 'storeShowing'])->name('customers.store-showing');
         Route::post('customers/{id}/send-whatsapp', [\App\Http\Controllers\Admin\CustomerController::class, 'sendWhatsapp'])->name('customers.send-whatsapp');
         Route::post('customers/{id}/toggle-status', [\App\Http\Controllers\Admin\CustomerController::class, 'toggleStatus'])->name('customers.toggle-status');
         Route::get('customers-export', [\App\Http\Controllers\Admin\CustomerController::class, 'exportExcel'])->name('customers.export');
@@ -119,4 +118,4 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-
+
