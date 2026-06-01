@@ -50,4 +50,4 @@ class HomeController extends Controller
 
         return view('web.properties.show', compact('property', 'relatedProperties'));
     }
-}
+}
