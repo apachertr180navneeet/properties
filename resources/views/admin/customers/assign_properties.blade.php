@@ -582,7 +582,7 @@
 
             checkbox.disabled = true;
 
-            fetch('/admin/customers/{{ $customer->id }}/toggle-property', {
+            fetch('{{ route("admin.customers.toggle-property", $customer->id) }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
