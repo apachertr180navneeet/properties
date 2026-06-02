@@ -1,131 +1,234 @@
 @extends('web.layouts.app')
 @section('content')
 <!-- Hero -->
-<section class="bg-primary text-white py-5">
-    <div class="container text-center py-4">
-        <h1 class="display-4 fw-bold mb-3">Find Your Dream Property</h1>
-        <p class="lead mb-0 opacity-75">Discover the best properties in your area with our comprehensive listings</p>
-    </div>
-</section>
-
-<!-- Search -->
-<section class="container" style="max-width: 960px;">
-    <div class="card shadow search-card border-0">
-        <div class="card-body p-4">
-            <form action="{{ route('home') }}" method="GET">
-                <div class="row g-2">
-                    <div class="col-md-4">
-                        <input type="text" name="search" class="form-control" placeholder="Location, Property Type..." value="{{ request('search') }}">
-                    </div>
-                    <div class="col-md-2">
-                        <select name="type" class="form-select">
-                            <option value="">Type</option>
-                            @foreach($types as $type)
-                                <option value="{{$type}}" {{ request('type') == $type ? 'selected' : '' }}>{{$type}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <select name="category" class="form-select">
-                            <option value="">Category</option>
-                            @foreach($categories as $category)
-                                <option value="{{$category}}" {{ request('category') == $category ? 'selected' : '' }}>{{$category}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <select name="city" class="form-select">
-                            <option value="">City</option>
-                            @foreach($cities as $city)
-                                <option value="{{$city}}" {{ request('city') == $city ? 'selected' : '' }}>{{$city}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</section>
-
-<!-- Properties -->
-<section class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold mb-0">Available Properties</h2>
-        <span class="text-muted">{{$properties->total()}} found</span>
-    </div>
-
-    @if($properties->isEmpty())
-        <div class="text-center py-5">
-            <h4 class="text-muted">No properties found</h4>
-            <a href="{{ route('home') }}" class="btn btn-outline-primary mt-3">View All</a>
-        </div>
-    @else
-        <div class="row g-4">
-            @foreach($properties as $property)
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 shadow-sm border-0">
-                    @if($property->property_photo)
-                        <img src="{{$property->property_photo}}" class="card-img-top" alt="{{$property->title}}" style="height: 200px;">
-                    @else
-                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <i class="bx bx-buildings display-3 text-muted"></i>
-                        </div>
-                    @endif
-                    <div class="card-body d-flex flex-column">
-                        <div class="mb-2">
-                            <span class="badge bg-primary me-1">{{$property->property_type}}</span>
-                            <span class="badge bg-secondary">{{$property->property_category}}</span>
-                        </div>
-                        <h5 class="card-title">{{ Str::limit($property->title, 30) }}</h5>
-                        <p class="text-muted small mb-2"><i class="bx bx-map"></i> {{$property->location}}, {{$property->city}}</p>
-                        <div class="d-flex justify-content-between align-items-center mt-auto">
-                            <span class="price">₹{{ number_format($property->price) }}</span>
-                            <small class="text-muted">{{$property->area_size}} {{$property->area_unit}}</small>
-                        </div>
-                        @if($property->salesPerson)
-                            <p class="text-muted small mt-2 mb-0"><i class="bx bx-user"></i> {{$property->salesPerson->name}}</p>
-                        @endif
-                    </div>
-                    <div class="card-footer bg-white border-top-0 pt-0">
-                        <a href="{{ url('properties/' . $property->id) }}" class="btn btn-outline-primary w-100">View Details</a>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-
-        <div class="mt-5">
-            {{ $properties->appends(request()->except('page'))->links() }}
-        </div>
-    @endif
-</section>
-
-<!-- Features -->
-<section class="bg-light py-5">
+<section class="hero-section">
     <div class="container">
-        <div class="row text-center g-4">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1>Reliable Roofing &amp; Fixing Services</h1>
+                    <p class="lead">
+                        We provide a variety of roofing and maintenance services for<br>
+                        all type of house makes happy.
+                    </p>
+                    <a href="{{ url('/about') }}" class="btn btn-primary me-3">Discover more</a>
+                    <a href="{{ url('/contact') }}" class="btn btn-outline-secondary">Free estimate</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image">
+                    <img src="{{ asset('assets/web/img/hero-image.jpg') }}" alt="Roofing Services" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section class="services-section py-5">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h2>Our services</h2>
+            <p>We’re providing quality roofing services</p>
+        </div>
+        <div class="row g-4">
             <div class="col-md-4">
-                <div class="p-4">
-                    <i class="bx bx-building-house feature-icon"></i>
-                    <h5 class="mt-3 fw-bold">Verified Properties</h5>
-                    <p class="text-muted mb-0">All properties are verified by our team</p>
+                <div class="service-item text-center">
+                    <img src="{{ asset('assets/web/img/service-1.jpg') }}" alt="Single play roofing" class="img-fluid mb-3">
+                    <h3><a href="{{ url('/single-play-roofing') }}">Single play roofing</a></h3>
+                    <p>Nulla commodo dolor massa, vel pellen esque nulla congue quis.</p>
+                    <a href="{{ url('/single-play-roofing') }}" class="read-more">Read More</a>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="p-4">
-                    <i class="bx bx-support feature-icon"></i>
-                    <h5 class="mt-3 fw-bold">24/7 Support</h5>
-                    <p class="text-muted mb-0">Our team is always ready to help you</p>
+                <div class="service-item text-center">
+                    <img src="{{ asset('assets/web/img/service-2.jpg') }}" alt="Modified roofing" class="img-fluid mb-3">
+                    <h3><a href="{{ url('/modified-roofing') }}">Modified roofing</a></h3>
+                    <p>Nulla commodo dolor massa, vel pellen esque nulla congue quis.</p>
+                    <a href="{{ url('/modified-roofing') }}" class="read-more">Read More</a>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="p-4">
-                    <i class="bx bx-shield feature-icon"></i>
-                    <h5 class="mt-3 fw-bold">Secure Transactions</h5>
-                    <p class="text-muted mb-0">Safe and secure property transactions</p>
+                <div class="service-item text-center">
+                    <img src="{{ asset('assets/web/img/service-3.jpg') }}" alt="Built-up roofing" class="img-fluid mb-3">
+                    <h3><a href="{{ url('/built-up-roofing') }}">Built-up roofing</a></h3>
+                    <p>Nulla commodo dolor massa, vel pellen esque nulla congue quis.</p>
+                    <a href="{{ url('/built-up-roofing') }}" class="read-more">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section class="about-section bg-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="about-image">
+                    <img src="{{ asset('assets/web/img/about-image.jpg') }}" alt="About Us" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-content">
+                    <h2>Experienced &amp; quality roofing services providers</h2>
+                    <p>
+                        Nulla commodo dolor massa, vel pellentesque nulla congue quis. 
+                        Fusce ut convallis diam. Nam id tortor et nunc tempor faucibus. 
+                        Sed eu leo egestas, imperdiet felis sed, vestibulum ligula.
+                    </p>
+                    <ul class="list-unstyled about-features">
+                        <li><i class="bx bx-check-circle me-2"></i> Innovative work</li>
+                        <li><i class="bx bx-check-circle me-2"></i> Certified company</li>
+                    </ul>
+                    <a href="{{ url('/about') }}" class="btn btn-primary mt-4">Discover more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why-choose-us-section py-5">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h2>Why choose us</h2>
+            <p>Few reasons to choose our company</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="feature-item text-center">
+                    <div class="feature-icon">
+                        <i class="bx bx-building-house"></i>
+                    </div>
+                    <h3>Quality materials</h3>
+                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute aboris nisi ut aliquip ex irure reprehederit.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item text-center">
+                    <div class="feature-icon">
+                        <i class="bx bx-shield"></i>
+                    </div>
+                    <h3>Fully insured</h3>
+                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute aboris nisi ut aliquip ex irure reprehederit.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item text-center">
+                    <div class="feature-icon">
+                        <i class="bx bx-badge-check"></i>
+                    </div>
+                    <h3>Mission statement</h3>
+                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute aboris nisi ut aliquip ex irure reprehederit.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item text-center">
+                    <div class="feature-icon">
+                        <i class="bx bx-user"></i>
+                    </div>
+                    <h3>Expert engineers</h3>
+                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute aboris nisi ut aliquip ex irure reprehederit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects -->
+<section class="projects-section py-5">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h2>Latest Projects</h2>
+            <p>Explore our latest projects for your inspiration</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="project-item">
+                    <img src="{{ asset('assets/web/img/project-1.jpg') }}" alt="Project" class="img-fluid">
+                    <h3><a href="{{ url('/work-details') }}">Modern roofing style</a></h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="project-item">
+                    <img src="{{ asset('assets/web/img/project-2.jpg') }}" alt="Project" class="img-fluid">
+                    <h3><a href="{{ url('/work-details') }}">Modern roofing style</a></h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="project-item">
+                    <img src="{{ asset('assets/web/img/project-3.jpg') }}" alt="Project" class="img-fluid">
+                    <h3><a href="{{ url('/work-details') }}">Modern roofing style</a></h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="project-item">
+                    <img src="{{ asset('assets/web/img/project-4.jpg') }}" alt="Project" class="img-fluid">
+                    <h3><a href="{{ url('/work-details') }}">Modern roofing style</a></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials-section bg-light py-5">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h2>What they’re talking about us</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="testimonial-item">
+                    <img src="{{ asset('assets/web/img/testimonial-1.jpg') }}" alt="Testimonial" class="img-fluid mb-3">
+                    <h3>Jessica Brown</h3>
+                    <p class="text-muted">CEO - Co Founder</p>
+                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea ex commodo consequat duis aute aboris nisi ut aliquip irure reprehederit in voluptate velit esse .</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="testimonial-item">
+                    <img src="{{ asset('assets/web/img/testimonial-2.jpg') }}" alt="Testimonial" class="img-fluid mb-3">
+                    <h3>David Cooper</h3>
+                    <p class="text-muted">CEO - Co Founder</p>
+                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea ex commodo consequat duis aute aboris nisi ut aliquip irure reprehederit in voluptate velit esse .</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="testimonial-item">
+                    <img src="{{ asset('assets/web/img/testimonial-3.jpg') }}" alt="Testimonial" class="img-fluid mb-3">
+                    <h3>Kevin Martin</h3>
+                    <p class="text-muted">CEO - Co Founder</p>
+                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea ex commodo consequat duis aute aboris nisi ut aliquip irure reprehederit in voluptate velit esse .</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="testimonial-item">
+                    <img src="{{ asset('assets/web/img/testimonial-4.jpg') }}" alt="Testimonial" class="img-fluid mb-3">
+                    <h3>Mike Hardson</h3>
+                    <p class="text-muted">CEO - Co Founder</p>
+                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea ex commodo consequat duis aute aboris nisi ut aliquip irure reprehederit in voluptate velit esse .</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="cta-content">
+                    <img src="{{ asset('assets/web/img/cta-image.jpg') }}" alt="CTA Image" class="img-fluid">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="cta-text">
+                    <h2>Quality roofing provider</h2>
+                    <p>Need roofing services?</p>
+                    <a href="{{ url('/contact') }}" class="btn btn-primary mt-3">get free quote</a>
                 </div>
             </div>
         </div>

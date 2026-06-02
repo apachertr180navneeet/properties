@@ -49,5 +49,136 @@ class HomeController extends Controller
 
         return view('web.properties.show', compact('property', 'relatedProperties'));
     }
+
+    // New methods for roofing company pages
+    public function about()
+    {
+        return view('web.about');
+    }
+
+    public function services()
+    {
+        return view('web.services');
+    }
+
+    public function servicesCarousel()
+    {
+        return view('web.services-carousel');
+    }
+
+    public function singlePlayRoofing()
+    {
+        return view('web.single-play-roofing');
+    }
+
+    public function modifiedRoofing()
+    {
+        return view('web.modified-roofing');
+    }
+
+    public function builtUpRoofing()
+    {
+        return view('web.built-up-roofing');
+    }
+
+    public function roofInspection()
+    {
+        return view('web.roof-inspection');
+    }
+
+    public function roofInstallation()
+    {
+        return view('web.roof-installation');
+    }
+
+    public function metalRoofing()
+    {
+        return view('web.metal-roofing');
+    }
+
+    public function team()
+    {
+        return view('web.team');
+    }
+
+    public function teamCarousel()
+    {
+        return view('web.team-carousel');
+    }
+
+    public function teamDetails($id)
+    {
+        return view('web.team-details');
+    }
+
+    public function testimonials()
+    {
+        return view('web.testimonials');
+    }
+
+    public function testimonialsCarousel()
+    {
+        return view('web.testimonials-carousel');
+    }
+
+    public function gallery()
+    {
+        return view('web.gallery');
+    }
+
+    public function galleryCarousel()
+    {
+        return view('web.gallery-carousel');
+    }
+
+    public function faq()
+    {
+        return view('web.faq');
+    }
+
+    public function notFound()
+    {
+        return view('web.404');
+    }
+
+    public function work()
+    {
+        return view('web.work');
+    }
+
+    public function workCarousel()
+    {
+        return view('web.work-carousel');
+    }
+
+    public function workDetails($id)
+    {
+        return view('web.work-details');
+    }
+
+    public function blog()
+    {
+        return view('web.blog');
+    }
+
+    public function blogCarousel()
+    {
+        return view('web.blog-carousel');
+    }
+
+    public function blogSidebar()
+    {
+        return view('web.blog-sidebar');
+    }
+
+    public function blogDetails($id)
+    {
+        return view('web.blog-details');
+    }
+
+    public function contact()
+    {
+        return view('web.contact');
+    }
 }
 
