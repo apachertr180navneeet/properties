@@ -27,7 +27,22 @@ class WhatsAppService
         }
     }
 
-    private function buildMessage(Property $property, string $customerName): string
+    public function sendPropertyDetails(Property $property): void
+    {
+        $salesPersons = $property->salesPersons;
+
+        if ($salesPersons->isEmpty()) return;
+
+        $message = $this->buildPropertyMessage($property);
+
+        foreach ($salesPersons as $sp) {
+            if ($sp->phone) {
+                $this->send($sp->phone, $message);
+            }
+        }
+    }
+
+    private function buildPropertyMessage(Property $property): string
     {
         $size = '';
         if ($property->length && $property->width) {
@@ -37,20 +52,25 @@ class WhatsAppService
         }
 
         $lines = [
-            "Property Assigned to Customer",
+            "Property Details",
             "",
-            "Property: " . ($property->title ?? '-'),
+            "Title: " . ($property->title ?? '-'),
             "Size: " . ($size ?: '-'),
             "Type: " . ($property->property_type ?? '-'),
             "Rate (Sq.Yard): " . ($property->sq_yard_rate ? '₹ ' . number_format($property->sq_yard_rate, 2) : '-'),
             "Total Amount: " . ($property->price ? '₹ ' . number_format($property->price, 2) : '-'),
             "Owner: " . ($property->owner_name ?? '-'),
             "Owner Phone: " . ($property->owner_phone ?? '-'),
-            "",
-            "Customer: " . $customerName,
         ];
 
         return implode("\n", $lines);
+    }
+
+    private function buildMessage(Property $property, string $customerName): string
+    {
+        $message = $this->buildPropertyMessage($property);
+
+        return $message . "\n\nCustomer: " . $customerName;
     }
 
     private function send(string $phone, string $message): void

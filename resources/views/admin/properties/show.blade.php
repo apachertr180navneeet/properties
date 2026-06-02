@@ -114,7 +114,7 @@
                     </p>
                 </div>
                 <div class="d-flex gap-2 flex-wrap align-items-center">
-                    <span class="badge bg-label-info fs-tiny px-3 py-2 rounded-pill">{{ $property->property_type }}</span>
+                    <span class="badge bg-label-info fs-tiny px-3 py-2 rounded-pill">{{ $property->property_type ?? 'N/A' }}</span>
                     <span class="badge bg-label-dark fs-tiny px-3 py-2 rounded-pill">{{ $property->property_category }}</span>
                     <div class="d-flex gap-1 ms-2 status-toggle-group" data-id="{{ $property->id }}">
                         @foreach(['available', 'sold', 'pending'] as $st)
@@ -160,6 +160,37 @@
             </div>
         </div>
 
+        <!-- Owner Information -->
+        <div class="prop-section">
+            <div class="prop-section-title"><i class="bx bx-user"></i> Owner Information</div>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Owner Name</div>
+                        <div class="value">{{ $property->owner_name ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Owner Phone</div>
+                        <div class="value">{{ $property->owner_phone ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Registry Owner</div>
+                        <div class="value">{{ $property->registry_owner ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Via</div>
+                        <div class="value">{{ $property->via ?? '-' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Location Details -->
         <div class="prop-section">
             <div class="prop-section-title"><i class="bx bx-map-pin"></i> Location Details</div>
@@ -185,14 +216,26 @@
             </div>
         </div>
 
-        <!-- Area & Pricing -->
+        <!-- Size & Dimensions -->
         <div class="prop-section">
-            <div class="prop-section-title"><i class="bx bx-calculator"></i> Area & Pricing</div>
+            <div class="prop-section-title"><i class="bx bx-calculator"></i> Size & Dimensions</div>
             <div class="row g-3">
                 <div class="col-md-3 col-6">
                     <div class="info-card">
                         <div class="label">Plot Number</div>
                         <div class="value">{{ $property->plot_number ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="info-card">
+                        <div class="label">Dimensions (L X W)</div>
+                        <div class="value">
+                            @if($property->length || $property->width)
+                                {{ $property->length ?? '-' }} {{ $property->size_separator ?? 'X' }} {{ $property->width ?? '-' }}
+                            @else
+                                -
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3 col-6">
@@ -207,10 +250,84 @@
                         <div class="value">{{ $property->corner_plot ?? '-' }}</div>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Facing</div>
+                        <div class="value">{{ $property->facing ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Build Type</div>
+                        <div class="value">{{ $property->build_type ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Condition</div>
+                        <div class="value">{{ $property->property_condition ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Construction Type</div>
+                        <div class="value">{{ $property->construction_type ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Property Age</div>
+                        <div class="value">{{ $property->property_age ?? '-' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing & Dates -->
+        <div class="prop-section">
+            <div class="prop-section-title"><i class="bx bx-money"></i> Pricing & Dates</div>
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="info-card">
+                        <div class="label">Full Amount</div>
+                        <div class="value">{{ $property->price ? '₹ ' . number_format($property->price, 2) : '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="info-card">
+                        <div class="label">Sq. Yard Rate</div>
+                        <div class="value">{{ $property->sq_yard_rate ? '₹ ' . number_format($property->sq_yard_rate, 2) : '-' }}</div>
+                    </div>
+                </div>
                 <div class="col-md-3 col-6">
                     <div class="info-card">
                         <div class="label">Stamp Duty</div>
                         <div class="value">{{ $property->stamp_duty ? '₹ ' . number_format($property->stamp_duty, 2) : '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="info-card">
+                        <div class="label">Add on Date</div>
+                        <div class="value">{{ $property->add_on_date ? \Carbon\Carbon::parse($property->add_on_date)->format('d M Y') : '-' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup & Remarks -->
+        <div class="prop-section">
+            <div class="prop-section-title"><i class="bx bx-wrench"></i> Setup & Remarks</div>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Setup Type</div>
+                        <div class="value">{{ $property->setup_type ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="info-card">
+                        <div class="label">Remarks</div>
+                        <div class="value">{{ $property->remarks ?? '-' }}</div>
                     </div>
                 </div>
             </div>

@@ -226,7 +226,9 @@ class CustomerController extends Controller
                 ->keyBy('id')
                 ->map(fn($p) => $p->salesPersons);
 
-            return view('admin.customers.assign_properties', compact('customer', 'properties', 'assignedIds', 'showings', 'propertySalesPersons'));
+            $salespersons = SalesPerson::where('status', 'active')->orderBy('name')->get();
+
+            return view('admin.customers.assign_properties', compact('customer', 'properties', 'assignedIds', 'showings', 'propertySalesPersons', 'salespersons'));
         } catch (Exception $e) {
             return back()->with('error', 'Error loading properties: ' . $e->getMessage());
         }

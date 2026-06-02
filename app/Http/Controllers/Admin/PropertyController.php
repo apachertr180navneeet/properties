@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Property;
 use App\Models\SalesPerson;
 use App\Models\AreaMaster;
+use App\Services\WhatsAppService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -314,10 +315,16 @@ class PropertyController extends Controller
                 $data['registry_document'] = $this->uploadFile($request->file('registry_document'), 'uploads/properties/documents/');
             }
 
+            $salesPersonIds = $request->input('sales_person_ids', []);
+            $data['sales_person_id'] = !empty($salesPersonIds) ? $salesPersonIds[0] : null;
+
             $property->fill($data);
             $property->save();
 
-            $property->salesPersons()->sync($request->input('sales_person_ids', []));
+            $property->salesPersons()->sync($salesPersonIds);
+
+            $property->load('salesPersons');
+            app(WhatsAppService::class)->sendPropertyDetails($property);
 
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json(['success' => true, 'message' => $message]);

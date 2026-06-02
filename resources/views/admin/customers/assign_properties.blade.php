@@ -510,9 +510,50 @@
                     </div>
                     <div class="property-detail-row">
                         <i class="bx bx-user"></i>
-                        <span class="detail-value">{{ optional($property->salesPerson)->name ?? '-' }}</span>
+                        <span class="detail-value">{{ $property->salesPersons->pluck('name')->implode(', ') ?: '-' }}</span>
                     </div>
                 </div>
+
+                @if($isAssigned)
+                    <div class="px-3 pb-2">
+                        <hr class="my-2">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
+                            <span class="fw-semibold text-muted" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.3px;">
+                                <i class="bx bx-calendar"></i> Showings
+                            </span>
+                            <button type="button" class="btn btn-sm btn-outline-primary" style="padding: 0.1rem 0.45rem; font-size: 0.7rem; border-radius: 4px; line-height: 1.2;" onclick="showAddShowing({{ $property->id }})">
+                                <i class="bx bx-plus"></i> Add
+                            </button>
+                        </div>
+                        <div class="showing-list-{{ $property->id }}">
+                            @if(isset($showings[$property->id]))
+                                @foreach($showings[$property->id] as $showing)
+                                    <div class="d-flex align-items-center justify-content-between showing-item-{{ $property->id }}-{{ $showing->id }}" style="padding: 0.15rem 0; font-size: 0.78rem;">
+                                        <span><i class="bx bx-user-circle text-primary" style="font-size: 0.8rem;"></i> {{ $showing->salesPerson->name ?? '-' }}</span>
+                                        <span class="text-muted">{{ $showing->show_date->format('d M Y') }}</span>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        <div class="add-showing-form-{{ $property->id }}" style="display: none; margin-top: 0.4rem;">
+                            <div class="d-flex gap-1">
+                                <select class="form-select form-select-sm showing-sales-person" style="font-size: 0.72rem; border-radius: 4px; padding: 0.2rem 0.4rem;">
+                                    <option value="">Sales Person</option>
+                                    @foreach($propertySalesPersons[$property->id] ?? [] as $sp)
+                                        <option value="{{ $sp->id }}">{{ $sp->name }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="date" class="form-control form-control-sm showing-date" style="font-size: 0.72rem; border-radius: 4px; width: 120px; padding: 0.2rem 0.4rem;" value="{{ date('Y-m-d') }}">
+                                <button type="button" class="btn btn-sm btn-success" style="padding: 0.1rem 0.4rem; font-size: 0.7rem; border-radius: 4px; line-height: 1.2;" onclick="saveShowing({{ $property->id }})">
+                                    <i class="bx bx-check"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" style="padding: 0.1rem 0.4rem; font-size: 0.7rem; border-radius: 4px; line-height: 1.2;" onclick="hideAddShowing({{ $property->id }})">
+                                    <i class="bx bx-x"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="property-card-footer">
                     <span class="property-status-badge {{ $statusColor }}">
@@ -522,7 +563,7 @@
                         <input type="checkbox"
                                class="toggle-property"
                                data-property-id="{{ $property->id }}"
-                               {{ $isAssigned ? 'checked' : '' }}>
+                               {{ $isAssigned ? 'checked disabled' : '' }}>
                         <span class="assign-switch-track"></span>
                         <span class="assign-switch-label">{{ $isAssigned ? 'Assigned' : 'Assign' }}</span>
                     </label>
@@ -571,6 +612,64 @@
             document.getElementById('filter-form').submit();
         });
 
+        // Show add showing form
+        window.showAddShowing = function(propertyId) {
+            document.querySelector('.add-showing-form-' + propertyId).style.display = 'block';
+        };
+
+        // Hide add showing form
+        window.hideAddShowing = function(propertyId) {
+            document.querySelector('.add-showing-form-' + propertyId).style.display = 'none';
+        };
+
+        // Save showing
+        window.saveShowing = function(propertyId) {
+            const form = document.querySelector('.add-showing-form-' + propertyId);
+            const salesPersonId = form.querySelector('.showing-sales-person').value;
+            const showDate = form.querySelector('.showing-date').value;
+
+            if (!salesPersonId) {
+                showToast('Please select a sales person.', 'error');
+                return;
+            }
+            if (!showDate) {
+                showToast('Please select a date.', 'error');
+                return;
+            }
+
+            fetch('{{ route("admin.customers.store-showing", $customer->id) }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    property_id: propertyId,
+                    sales_person_id: salesPersonId,
+                    show_date: showDate
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    showToast(res.message, 'success');
+                    const list = document.querySelector('.showing-list-' + propertyId);
+                    const item = document.createElement('div');
+                    item.className = 'd-flex align-items-center justify-content-between';
+                    item.style.cssText = 'padding: 0.15rem 0; font-size: 0.78rem;';
+                    item.innerHTML = '<span><i class="bx bx-user-circle text-primary" style="font-size: 0.8rem;"></i> ' + res.showing.sales_person_name + '</span>' +
+                        '<span class="text-muted">' + res.showing.show_date + '</span>';
+                    list.appendChild(item);
+                    hideAddShowing(propertyId);
+                    form.querySelector('.showing-sales-person').value = '';
+                } else {
+                    showToast(res.message || 'Error saving showing.', 'error');
+                }
+            })
+            .catch(() => showToast('Error saving showing.', 'error'));
+        };
+
         // Toggle property assignment
         document.addEventListener('change', function(e) {
             const checkbox = e.target.closest('.toggle-property');
@@ -596,29 +695,7 @@
                 checkbox.disabled = false;
 
                 if (res.success) {
-                    showToast(res.message, 'success');
-
-                    // Update counter
-                    document.getElementById('assigned-count').textContent = res.total_assigned;
-
-                    // Update card visual state
-                    if (res.assigned) {
-                        card.classList.add('is-assigned');
-                        label.textContent = 'Assigned';
-                        // Add ribbon if not exists
-                        if (!document.getElementById('ribbon-' + propertyId)) {
-                            const ribbon = document.createElement('div');
-                            ribbon.className = 'assigned-ribbon';
-                            ribbon.id = 'ribbon-' + propertyId;
-                            ribbon.textContent = 'ASSIGNED';
-                            card.insertBefore(ribbon, card.firstChild);
-                        }
-                    } else {
-                        card.classList.remove('is-assigned');
-                        label.textContent = 'Assign';
-                        const ribbon = document.getElementById('ribbon-' + propertyId);
-                        if (ribbon) ribbon.remove();
-                    }
+                    location.reload();
                 } else {
                     checkbox.checked = !checkbox.checked;
                     showToast(res.message || 'Error updating assignment.', 'error');
