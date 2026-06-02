@@ -1,4 +1,4 @@
-﻿@extends('web.layouts.app')
+@extends('web.layouts.app')
 @section('content')
 <!-- Hero Section -->
 <section class='bg-primary text-white py-5'>
@@ -141,4 +141,4 @@
         </div>
     </div>
 </section>
-@endsection
+@endsection

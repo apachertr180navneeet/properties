@@ -1,4 +1,4 @@
-﻿@extends('web.layouts.app')
+@extends('web.layouts.app')
 @section('content')
 <section class='bg-primary text-white py-5'>
     <div class='container py-4'>
@@ -102,4 +102,4 @@
     </div>
 </section>
 @endif
-@endsection
+@endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Property;
+use App\Models\PropertyShowing;
 use App\Models\SalesPerson;
 use Exception;
 use Illuminate\Http\Request;
@@ -182,15 +183,16 @@ class CustomerController extends Controller
     public function assignProperties(Request $request, $id)
     {
         try {
-            $customer = Customer::with('properties')->findOrFail($id);
+            $customer = Customer::with(['properties', 'showings.salesPerson'])->findOrFail($id);
             $assignedIds = $customer->properties->pluck('id')->toArray();
+            $showings = $customer->showings->groupBy('property_id');
 
             $query = Property::query()
                 ->where(function ($q) use ($assignedIds) {
                     $q->where('status', 'available')
                       ->orWhereIn('id', $assignedIds);
                 })
-                ->with('salesPerson');
+                ->with('salesPersons');
 
             if ($request->filled('search')) {
                 $search = $request->search;
@@ -218,9 +220,53 @@ class CustomerController extends Controller
                 ->paginate($request->get('limit', 12))
                 ->withQueryString();
 
-            return view('admin.customers.assign_properties', compact('customer', 'properties', 'assignedIds'));
+            $propertySalesPersons = Property::whereIn('id', $assignedIds)
+                ->with('salesPersons')
+                ->get()
+                ->keyBy('id')
+                ->map(fn($p) => $p->salesPersons);
+
+            return view('admin.customers.assign_properties', compact('customer', 'properties', 'assignedIds', 'showings', 'propertySalesPersons'));
         } catch (Exception $e) {
             return back()->with('error', 'Error loading properties: ' . $e->getMessage());
+        }
+    }
+
+    public function storeShowing(Request $request, $id)
+    {
+        try {
+            $customer = Customer::findOrFail($id);
+
+            $validator = Validator::make($request->all(), [
+                'property_id' => 'required|exists:properties,id',
+                'sales_person_id' => 'required|exists:sales_persons,id',
+                'show_date' => 'required|date',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+            }
+
+            $showing = PropertyShowing::create([
+                'customer_id' => $customer->id,
+                'property_id' => $request->property_id,
+                'sales_person_id' => $request->sales_person_id,
+                'show_date' => $request->show_date,
+            ]);
+
+            $showing->load('salesPerson');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Showing recorded successfully!',
+                'showing' => [
+                    'id' => $showing->id,
+                    'sales_person_name' => $showing->salesPerson->name,
+                    'show_date' => $showing->show_date->format('d M Y'),
+                ],
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
         }
     }
 
@@ -229,7 +275,7 @@ class CustomerController extends Controller
         try {
             $customer = Customer::findOrFail($id);
             $propertyId = $request->input('property_id');
-            $property = Property::findOrFail($propertyId);
+            $property = Property::with('salesPersons')->findOrFail($propertyId);
 
             if ($customer->properties()->where('property_id', $propertyId)->exists()) {
                 $customer->properties()->detach($propertyId);
@@ -239,6 +285,10 @@ class CustomerController extends Controller
                 $customer->properties()->attach($propertyId);
                 $assigned = true;
                 $message = 'Property "' . $property->title . '" assigned to ' . $customer->name;
+
+                if ($property->salesPersons->isNotEmpty()) {
+                    app(\App\Services\WhatsAppService::class)->sendPropertyAssignedToCustomer($property, $customer->name);
+                }
             }
 
             return response()->json([

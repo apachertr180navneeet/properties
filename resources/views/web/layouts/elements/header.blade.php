@@ -1,4 +1,4 @@
-﻿<nav class='navbar navbar-expand-lg navbar-dark bg-primary'>
+<nav class='navbar navbar-expand-lg navbar-dark bg-primary'>
     <div class='container-fluid'>
         <a class='navbar-brand' href='{{ url('/') }}'>
             <h5 class='pt-1 mb-0'>{{ config('app.name') }}</h5>
@@ -19,4 +19,4 @@
             </ul>
         </div>
     </div>
-</nav>
+</nav>
