@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="{{ config('app.name') }}">
+<html lang="en" ng-app="{{ config('app.name') }}" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default"
+    data-assets-path="../assets/" data-template="vertical-menu-template-free">
     <head>
         <meta charset="utf-8" />
         <title>{{ config('app.name') }}</title>
