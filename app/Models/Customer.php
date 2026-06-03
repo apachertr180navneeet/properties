@@ -20,11 +20,15 @@ class Customer extends Model
         'visit_date',
         'whatsapp_count',
         'messaging',
+        'messaging_started_at',
+        'messaging_stopped_at',
         'status',
     ];
 
     protected $casts = [
         'visit_date' => 'date',
+        'messaging_started_at' => 'datetime',
+        'messaging_stopped_at' => 'datetime',
     ];
 
     public function salesPerson()

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\MessageTemplate;
 use App\Models\Property;
 use App\Models\PropertyShowing;
 use App\Models\SalesPerson;
+use App\Services\WhatsAppService;
 use Exception;
 use Illuminate\Http\Request;
 use Validator;
@@ -112,7 +114,9 @@ class CustomerController extends Controller
             $sheet->setCellValue('F1', 'Visit Date');
             $sheet->setCellValue('G1', 'Msg Count');
             $sheet->setCellValue('H1', 'Messaging');
-            $sheet->setCellValue('I1', 'Status');
+            $sheet->setCellValue('I1', 'Start Date');
+            $sheet->setCellValue('J1', 'Stop Date');
+            $sheet->setCellValue('K1', 'Status');
 
             $row = 2;
             foreach ($customers as $i => $customer) {
@@ -124,7 +128,9 @@ class CustomerController extends Controller
                 $sheet->setCellValue('F' . $row, optional($customer->visit_date)->format('d/m/Y'));
                 $sheet->setCellValue('G' . $row, $customer->whatsapp_count);
                 $sheet->setCellValue('H' . $row, ucfirst($customer->messaging));
-                $sheet->setCellValue('I' . $row, ucfirst($customer->status));
+                $sheet->setCellValue('I' . $row, optional($customer->messaging_started_at)->format('d/m/Y H:i'));
+                $sheet->setCellValue('J' . $row, optional($customer->messaging_stopped_at)->format('d/m/Y H:i'));
+                $sheet->setCellValue('K' . $row, ucfirst($customer->status));
                 $row++;
             }
 
@@ -160,11 +166,25 @@ class CustomerController extends Controller
             
             if ($customer->messaging === 'start') {
                 $customer->messaging = 'stop';
+                $customer->messaging_stopped_at = now();
                 $message = 'WhatsApp service stopped successfully.';
             } else {
                 $customer->messaging = 'start';
-                $customer->increment('whatsapp_count');
+                $customer->messaging_started_at = now();
                 $message = 'WhatsApp service started successfully.';
+
+                $whatsApp = app(WhatsAppService::class);
+
+                $templates = MessageTemplate::where('days_to_send', 1)
+                    ->where('status', 'active')
+                    ->get();
+
+                foreach ($templates as $template) {
+                    if ($whatsApp->sendMessage($customer->phone, $template->message_content)) {
+                        $customer->whatsapp_count++;
+                        $message = 'WhatsApp service started & Day 1 message sent.';
+                    }
+                }
             }
             
             $customer->save();

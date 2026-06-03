@@ -9,6 +9,8 @@
                 <th>Visit Date</th>
                 <th>Msg Count</th>
                 <th>WhatsApp Service</th>
+                <th>Start Date</th>
+                <th>Stop Date</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -35,6 +37,8 @@
                             </button>
                         @endif
                     </td>
+                    <td class="text-nowrap">{{ optional($customer->messaging_started_at)->format('d/m/Y H:i') ?? '-' }}</td>
+                    <td class="text-nowrap">{{ optional($customer->messaging_stopped_at)->format('d/m/Y H:i') ?? '-' }}</td>
                     <td>
                         <label class="premium-switch">
                             <input type="checkbox" class="toggle-status" data-id="{{ $customer->id }}" {{ $customer->status === 'active' ? 'checked' : '' }}>
@@ -61,7 +65,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="text-center py-5 text-muted">
+                    <td colspan="11" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No customers found matching the search criteria.
                     </td>

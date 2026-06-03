@@ -73,6 +73,17 @@ class WhatsAppService
         return $message . "\n\nCustomer: " . $customerName;
     }
 
+    public function sendMessage(string $phone, string $message): bool
+    {
+        try {
+            $this->send($phone, $message);
+            return true;
+        } catch (\Exception $e) {
+            logger('WhatsApp sendMessage failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+
     private function send(string $phone, string $message): void
     {
         try {
