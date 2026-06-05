@@ -250,6 +250,11 @@
         opacity: .5;
         pointer-events: none;
     }
+    h5#addEditModalTitle {
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.15rem;
+    }
 </style>
 @endsection
 

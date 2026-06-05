@@ -37,8 +37,8 @@
                             </button>
                         @endif
                     </td>
-                    <td class="text-nowrap">{{ optional($customer->messaging_started_at)->format('d/m/Y H:i') ?? '-' }}</td>
-                    <td class="text-nowrap">{{ optional($customer->messaging_stopped_at)->format('d/m/Y H:i') ?? '-' }}</td>
+                    <td class="text-nowrap">{{ optional($customer->messaging_started_at)->format('d/m/Y') ?? '-' }}</td>
+                    <td class="text-nowrap">{{ optional($customer->messaging_stopped_at)->format('d/m/Y') ?? '-' }}</td>
                     <td>
                         <label class="premium-switch">
                             <input type="checkbox" class="toggle-status" data-id="{{ $customer->id }}" {{ $customer->status === 'active' ? 'checked' : '' }}>

@@ -128,8 +128,8 @@ class CustomerController extends Controller
                 $sheet->setCellValue('F' . $row, optional($customer->visit_date)->format('d/m/Y'));
                 $sheet->setCellValue('G' . $row, $customer->whatsapp_count);
                 $sheet->setCellValue('H' . $row, ucfirst($customer->messaging));
-                $sheet->setCellValue('I' . $row, optional($customer->messaging_started_at)->format('d/m/Y H:i'));
-                $sheet->setCellValue('J' . $row, optional($customer->messaging_stopped_at)->format('d/m/Y H:i'));
+                $sheet->setCellValue('I' . $row, optional($customer->messaging_started_at)->format('d/m/Y'));
+                $sheet->setCellValue('J' . $row, optional($customer->messaging_stopped_at)->format('d/m/Y'));
                 $sheet->setCellValue('K' . $row, ucfirst($customer->status));
                 $row++;
             }
