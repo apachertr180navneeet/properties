@@ -306,6 +306,9 @@ class PropertyController extends Controller
                 'property_age',
             ]);
             $data['corner_plot'] = $request->corner_plot;
+            if (empty($data['size_separator'])) {
+                $data['size_separator'] = 'X';
+            }
 
             if ($request->hasFile('property_photo')) {
                 $data['property_photo'] = $this->uploadFile($request->file('property_photo'), 'uploads/properties/photos/');
