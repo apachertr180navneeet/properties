@@ -231,7 +231,7 @@ class PropertyController extends Controller
             $validator = Validator::make($request->all(), [
                 'title' => 'required|string|max:255',
                 'owner_name' => 'nullable|string|max:255',
-'owner_phone' => 'nullable|string|max:20',
+                'owner_phone' => 'nullable|string|max:20',
                 'property_type' => 'nullable|string|max:255',
                 'property_category' => 'required|in:Residential,Commercial',
 
@@ -246,7 +246,7 @@ class PropertyController extends Controller
                 'corner_plot' => 'required|in:Yes,No',
                 'length' => 'nullable|numeric|min:0',
                 'width' => 'nullable|numeric|min:0',
-                'size_separator' => 'nullable|string|max:10',
+
                 'facing' => 'nullable|in:East,West,North,South',
                 'remarks' => 'nullable|string',
                 'via' => 'nullable|string|max:255',
@@ -276,9 +276,9 @@ class PropertyController extends Controller
 
             $data = $request->only([
                 'title',
-'owner_name',
-'owner_phone',
-'property_type',
+                'owner_name',
+                'owner_phone',
+                'property_type',
                 'property_category',
                 'city',
                 'state',
@@ -290,7 +290,7 @@ class PropertyController extends Controller
                 'area_unit',
                 'length',
                 'width',
-                'size_separator',
+
                 'facing',
                 'remarks',
                 'via',
@@ -306,9 +306,7 @@ class PropertyController extends Controller
                 'property_age',
             ]);
             $data['corner_plot'] = $request->corner_plot;
-            if (empty($data['size_separator'])) {
-                $data['size_separator'] = 'X';
-            }
+            $data['size_separator'] = 'X';
 
             if ($request->hasFile('property_photo')) {
                 $data['property_photo'] = $this->uploadFile($request->file('property_photo'), 'uploads/properties/photos/');

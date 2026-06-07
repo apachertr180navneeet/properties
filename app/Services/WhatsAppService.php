@@ -12,17 +12,18 @@ class WhatsAppService
     private string $instanceId = '468753';
     private string $baseUrl = 'https://wywspl.com/sendMessage.php';
 
-    public function sendPropertyAssignedToCustomer(Property $property, string $customerName): void
+    public function sendPropertyAssignedToCustomer(Property $property, string $customerName, string $customerPhone): void
     {
         $salesPersons = $property->salesPersons;
 
         if ($salesPersons->isEmpty()) return;
 
-        $message = $this->buildMessage($property, $customerName);
+        $message = $this->buildMessage($property, $customerName, $customerPhone);
 
         foreach ($salesPersons as $sp) {
             if ($sp->phone) {
-                $this->send($sp->phone, $message);
+                $personalMsg = "Dear " . $sp->name . ",\n\n" . $message;
+                $this->send($sp->phone, $personalMsg);
             }
         }
     }
@@ -37,7 +38,8 @@ class WhatsAppService
 
         foreach ($salesPersons as $sp) {
             if ($sp->phone) {
-                $this->send($sp->phone, $message);
+                $personalMsg = "Dear " . $sp->name . ",\n\n" . $message;
+                $this->send($sp->phone, $personalMsg);
             }
         }
     }
@@ -59,18 +61,17 @@ class WhatsAppService
             "Type: " . ($property->property_type ?? '-'),
             "Rate (Sq.Yard): " . ($property->sq_yard_rate ? '₹ ' . number_format($property->sq_yard_rate, 2) : '-'),
             "Total Amount: " . ($property->price ? '₹ ' . number_format($property->price, 2) : '-'),
-            "Owner: " . ($property->owner_name ?? '-'),
-            "Owner Phone: " . ($property->owner_phone ?? '-'),
+
         ];
 
         return implode("\n", $lines);
     }
 
-    private function buildMessage(Property $property, string $customerName): string
+    private function buildMessage(Property $property, string $customerName, string $customerPhone): string
     {
         $message = $this->buildPropertyMessage($property);
 
-        return $message . "\n\nCustomer: " . $customerName;
+        return $message . "\n\nCustomer Name: " . $customerName . "\nCustomer Phone: " . $customerPhone;
     }
 
     public function sendMessage(string $phone, string $message): bool

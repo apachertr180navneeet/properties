@@ -107,11 +107,7 @@
             <input type="number" step="0.01" min="0" name="length" id="length" class="form-control premium-input @error('length') is-invalid @enderror" value="{{ old('length', $property->length) }}" placeholder="e.g. 20">
             @error('length')<span class="error-text">{{ $message }}</span>@enderror
         </div>
-        <div class="col-md-3">
-            <label class="form-label form-label-premium" for="size_separator">X</label>
-            <input type="text" name="size_separator" id="size_separator" class="form-control premium-input @error('size_separator') is-invalid @enderror" value="{{ old('size_separator', $property->size_separator) }}" placeholder="e.g. X">
-            @error('size_separator')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
+
         <div class="col-md-3">
             <label class="form-label form-label-premium" for="width">Width (W)</label>
             <input type="number" step="0.01" min="0" name="width" id="width" class="form-control premium-input @error('width') is-invalid @enderror" value="{{ old('width', $property->width) }}" placeholder="e.g. 45">

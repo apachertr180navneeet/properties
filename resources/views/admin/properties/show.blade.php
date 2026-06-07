@@ -231,7 +231,7 @@
                         <div class="label">Dimensions (L X W)</div>
                         <div class="value">
                             @if($property->length || $property->width)
-                                {{ $property->length ?? '-' }} {{ $property->size_separator ?? 'X' }} {{ $property->width ?? '-' }}
+                                {{ $property->length ?? '-' }} X {{ $property->width ?? '-' }}
                             @else
                                 -
                             @endif

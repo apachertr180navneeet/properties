@@ -309,7 +309,7 @@ class CustomerController extends Controller
                 $message = 'Property "' . $property->title . '" assigned to ' . $customer->name;
 
                 if ($property->salesPersons->isNotEmpty()) {
-                    app(\App\Services\WhatsAppService::class)->sendPropertyAssignedToCustomer($property, $customer->name);
+                    app(\App\Services\WhatsAppService::class)->sendPropertyAssignedToCustomer($property, $customer->name, $customer->phone);
                 }
             }
 
