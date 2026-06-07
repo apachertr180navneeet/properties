@@ -56,7 +56,7 @@ class SalesPersonController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
-                'email' => 'nullable|email|unique:sales_persons,email',
+                'email' => 'nullable|email',
                 'phone' => 'required|string|digits:10|unique:sales_persons,phone',
                 'city' => 'required|string|max:255',
             ]);
@@ -115,7 +115,7 @@ class SalesPersonController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
-                'email' => 'nullable|email|unique:sales_persons,email,' . $id,
+                'email' => 'nullable|email',
                 'phone' => 'required|string|digits:10|unique:sales_persons,phone,' . $id,
                 'city' => 'required|string|max:255',
             ]);
