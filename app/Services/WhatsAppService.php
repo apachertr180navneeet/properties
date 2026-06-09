@@ -12,9 +12,9 @@ class WhatsAppService
     private string $instanceId = '468753';
     private string $baseUrl = 'https://wywspl.com/sendMessage.php';
 
-    public function sendPropertyAssignedToCustomer(Property $property, string $customerName, string $customerPhone): void
+    public function sendPropertyAssignedToCustomer(Property $property, string $customerName, string $customerPhone, $salesPersons = null): void
     {
-        $salesPersons = $property->salesPersons;
+        $salesPersons ??= $property->salesPersons;
 
         if ($salesPersons->isEmpty()) return;
 
@@ -28,9 +28,9 @@ class WhatsAppService
         }
     }
 
-    public function sendPropertyDetails(Property $property): void
+    public function sendPropertyDetails(Property $property, $salesPersons = null): void
     {
-        $salesPersons = $property->salesPersons;
+        $salesPersons ??= $property->salesPersons;
 
         if ($salesPersons->isEmpty()) return;
 

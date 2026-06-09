@@ -319,13 +319,28 @@ class PropertyController extends Controller
             $salesPersonIds = $request->input('sales_person_ids', []);
             $data['sales_person_id'] = !empty($salesPersonIds) ? $salesPersonIds[0] : null;
 
+            $oldSalesPersonIds = $property->salesPersons()->pluck('sales_person_id')->toArray();
+
             $property->fill($data);
             $property->save();
 
             $property->salesPersons()->sync($salesPersonIds);
 
-            $property->load('salesPersons');
-            app(WhatsAppService::class)->sendPropertyDetails($property);
+            $newSalesPersonIds = array_diff($salesPersonIds, $oldSalesPersonIds);
+            $newSalesPersons = !empty($newSalesPersonIds)
+                ? SalesPerson::whereIn('id', $newSalesPersonIds)->get()
+                : collect();
+
+            $property->load('salesPersons', 'customers');
+            app(WhatsAppService::class)->sendPropertyDetails($property, $newSalesPersons);
+
+            if ($newSalesPersons->isNotEmpty()) {
+                foreach ($property->customers as $customer) {
+                    app(WhatsAppService::class)->sendPropertyAssignedToCustomer(
+                        $property, $customer->name, $customer->phone, $newSalesPersons
+                    );
+                }
+            }
 
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json(['success' => true, 'message' => $message]);

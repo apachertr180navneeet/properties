@@ -68,6 +68,11 @@ class Property extends Model
         return $this->belongsToMany(SalesPerson::class, 'property_sales_person');
     }
 
+    public function customers()
+    {
+        return $this->belongsToMany(Customer::class)->withTimestamps();
+    }
+
     public function showings()
     {
         return $this->hasMany(PropertyShowing::class);
