@@ -49,5 +49,11 @@
 				<div data-i18n="Message Templates">Message Templates</div>
 			</a>
 		</li>
+		<li class="menu-item {{ request()->is('admin/reports/showings*') ? 'active' : ''}}">
+			<a href="{{route('admin.reports.showings')}}" class="menu-link">
+				<i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
+				<div data-i18n="Showings Report">Showings Report</div>
+			</a>
+		</li>
 	</ul>
 </aside>

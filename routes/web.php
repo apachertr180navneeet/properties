@@ -139,6 +139,11 @@ Route::name('admin.')->prefix('admin')->group(function () {
                 'update' => 'customers.update',
                 'destroy' => 'customers.destroy',
             ]);
+
+            // Showings Report routes
+            Route::get('reports/showings', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.showings');
+            Route::get('reports/showings-table', [\App\Http\Controllers\Admin\ReportController::class, 'getTable'])->name('reports.showings.table');
+            Route::get('reports/showings-export', [\App\Http\Controllers\Admin\ReportController::class, 'exportExcel'])->name('reports.showings.export');
         });
 });
 
@@ -254,6 +259,11 @@ Route::name('admin.')->prefix('admin')->group(function () {
             'update' => 'customers.update',
             'destroy' => 'customers.destroy',
         ]);
+
+        // Showings Report routes
+        Route::get('reports/showings', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.showings');
+        Route::get('reports/showings-table', [\App\Http\Controllers\Admin\ReportController::class, 'getTable'])->name('reports.showings.table');
+        Route::get('reports/showings-export', [\App\Http\Controllers\Admin\ReportController::class, 'exportExcel'])->name('reports.showings.export');
     });
 
 });
