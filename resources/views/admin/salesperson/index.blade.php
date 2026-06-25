@@ -391,17 +391,71 @@
         opacity: .5;
         pointer-events: none;
     }
+
+    .btn-premium-action {
+        color: #ffffff !important;
+        border: none !important;
+        padding: 0.6rem 1.5rem !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        font-size: 0.9rem !important;
+        transition: all 0.2s ease !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .btn-premium-print {
+        background-color: #696cff !important;
+    }
+    .btn-premium-print:hover {
+        background-color: #5f61e6 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(105, 108, 255, 0.2);
+    }
+
+    /* PRINT STYLES */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #print-section, #print-section * {
+            visibility: visible;
+        }
+        #print-section {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+        .card-header, .print-btn-container, .navbar, .layout-menu, .content-backdrop, footer {
+            display: none !important;
+        }
+        .table-responsive {
+            overflow: visible !important;
+        }
+        .pagination-container {
+            display: none !important;
+        }
+    }
 </style>
 @endsection
 
 @section('content')
-<div class="container-fluid flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-3">
+<div class="container-fluid flex-grow-1 container-p-y" id="print-section">
+    <!-- Hidden Print Header -->
+    <div class="d-none d-print-block text-center mb-4">
+        <h2>{{ config('app.name', 'Paresh Properties') }}</h2>
+        <h4>Sales Persons List</h4>
+        <p class="text-muted small">Generated on: {{ now()->format('d M Y, h:i A') }}</p>
+        <hr>
+    </div>
+
+    <h4 class="fw-bold py-3 mb-3 d-print-none">
         <span class="text-muted fw-light">Management /</span> Sales Persons
     </h4>
 
     <!-- Filter Bar Card -->
-    <div class="card filter-card">
+    <div class="card filter-card d-print-none">
         <form action="{{ route('admin.salespersons.index') }}" method="GET" id="search-form">
             <div class="filter-bar-container">
                 <!-- Search Input -->
@@ -420,6 +474,9 @@
                     <a href="{{ route('admin.salespersons.export') }}?{{ http_build_query(request()->all()) }}" class="btn btn-premium-add" style="background-color: #28a745 !important;">
                         <i class="bx bx-download"></i> Excel
                     </a>
+                    <button type="button" class="btn btn-premium-action btn-premium-print" id="print-btn">
+                        <i class="bx bx-printer"></i> PRINT
+                    </button>
                 </div>
             </div>
         </form>
@@ -748,6 +805,11 @@
             url.searchParams.delete('search');
             window.history.replaceState({}, '', url);
             refreshTable();
+        });
+
+        // Trigger print
+        document.getElementById('print-btn').addEventListener('click', function() {
+            window.print();
         });
     });
 

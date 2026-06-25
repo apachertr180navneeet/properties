@@ -188,11 +188,18 @@
             top: 0;
             width: 100%;
         }
+        html, body {
+            overflow: visible !important;
+            overflow-x: visible !important;
+            overflow-y: visible !important;
+        }
         .card-header, .print-btn-container, .navbar, .layout-menu, .content-backdrop, footer {
             display: none !important;
         }
         .table-responsive {
             overflow: visible !important;
+            overflow-x: visible !important;
+            -webkit-overflow-scrolling: auto !important;
         }
         .pagination-container {
             display: none !important;
@@ -249,6 +256,9 @@
                     <a href="{{ route('admin.reports.showings.export') }}?{{ http_build_query(request()->all()) }}" class="btn btn-premium-action btn-premium-download" id="excel-btn">
                         <i class="bx bx-download"></i> Excel
                     </a>
+                    <button type="button" class="btn btn-premium-action btn-premium-print" id="print-btn">
+                        <i class="bx bx-printer"></i> PRINT
+                    </button>
                 </div>
             </div>
         </form>
@@ -258,13 +268,6 @@
 
     <div id="showing-table-container" class="card border-0 shadow-sm mb-4" style="border-radius: 12px; overflow: hidden;">
         @include('admin.reports.partials.table')
-    </div>
-
-    <!-- Print Button Placement as per drawing -->
-    <div class="d-flex justify-content-end mb-4 print-btn-container d-print-none">
-        <button type="button" class="btn btn-premium-action btn-premium-print" id="print-btn">
-            <i class="bx bx-printer"></i> PRINT
-        </button>
     </div>
 </div>
 @endsection

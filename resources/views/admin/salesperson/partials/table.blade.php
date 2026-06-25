@@ -67,7 +67,7 @@
     </table>
 </div>
 @if($salespersons->hasPages())
-    <div class="card-footer d-flex justify-content-end bg-white border-0 py-3">
+    <div class="card-footer d-flex justify-content-end bg-white border-0 py-3 pagination-container">
     <x-pagination :paginator="$salespersons" />
     </div>
 @endif

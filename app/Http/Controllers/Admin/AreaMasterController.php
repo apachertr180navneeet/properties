@@ -23,7 +23,7 @@ class AreaMasterController extends Controller
             }
 
             $limit = $request->get('limit', 10);
-            $areaMasters = $query->orderBy('id', 'desc')->paginate($limit)->withQueryString();
+            $areaMasters = $query->orderBy('area_name', 'asc')->paginate($limit)->withQueryString();
 
             return view('admin.areamaster.index', compact('areaMasters'));
         } catch (Exception $e) {
@@ -140,7 +140,7 @@ class AreaMasterController extends Controller
                 $query->where('area_name', 'like', "%{$search}%");
             }
 
-            $areaMasters = $query->orderBy('id', 'desc')->get();
+            $areaMasters = $query->orderBy('area_name', 'asc')->get();
 
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
@@ -197,7 +197,7 @@ class AreaMasterController extends Controller
         }
 
         $limit = $request->get('limit', 10);
-        $areaMasters = $query->orderBy('id', 'desc')->paginate($limit)->withQueryString();
+        $areaMasters = $query->orderBy('area_name', 'asc')->paginate($limit)->withQueryString();
 
         $html = view('admin.areamaster.partials.table', compact('areaMasters'))->render();
         return response()->json(['success' => true, 'html' => $html]);

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Http;
 
 class WhatsAppService
 {
-    private string $authKey = 'NAVNEETGSG';
-    private string $instanceId = '468753';
+    private string $authKey = 'PARESHPROPERTIES';
+    private string $instanceId = '624537';
     private string $baseUrl = 'https://wywspl.com/sendMessage.php';
 
     public function sendPropertyAssignedToCustomer(Property $property, string $customerName, string $customerPhone, $salesPersons = null): void

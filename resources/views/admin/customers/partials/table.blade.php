@@ -6,11 +6,8 @@
                 <th>Mobile</th>
                 <th>City</th>
                 <th>Sales Person</th>
-                <th>Visit Date</th>
                 <th>Msg Count</th>
                 <th>WhatsApp Service</th>
-                <th>Start Date</th>
-                <th>Stop Date</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
@@ -22,7 +19,6 @@
                     <td>{{ $customer->phone ?? '-' }}</td>
                     <td>{{ $customer->city ?? '-' }}</td>
                     <td>{{ optional($customer->salesPerson)->name ?? '-' }}</td>
-                    <td>{{ optional($customer->visit_date)->format('d/m/Y') ?? '-' }}</td>
                     <td class="text-center">
                         <span class="whatsapp-count-{{ $customer->id }} fw-semibold">{{ $customer->whatsapp_count }}</span>
                     </td>
@@ -37,8 +33,6 @@
                             </button>
                         @endif
                     </td>
-                    <td class="text-nowrap">{{ optional($customer->messaging_started_at)->format('d/m/Y') ?? '-' }}</td>
-                    <td class="text-nowrap">{{ optional($customer->messaging_stopped_at)->format('d/m/Y') ?? '-' }}</td>
                     <td>
                         <label class="premium-switch">
                             <input type="checkbox" class="toggle-status" data-id="{{ $customer->id }}" {{ $customer->status === 'active' ? 'checked' : '' }}>
