@@ -109,28 +109,34 @@ class CustomerController extends Controller
             $sheet->setCellValue('A1', 'S.No');
             $sheet->setCellValue('B1', 'Name');
             $sheet->setCellValue('C1', 'Phone');
-            $sheet->setCellValue('D1', 'City');
-            $sheet->setCellValue('E1', 'Sales Person');
-            $sheet->setCellValue('F1', 'Visit Date');
-            $sheet->setCellValue('G1', 'Msg Count');
-            $sheet->setCellValue('H1', 'Messaging');
-            $sheet->setCellValue('I1', 'Start Date');
-            $sheet->setCellValue('J1', 'Stop Date');
-            $sheet->setCellValue('K1', 'Status');
+            $sheet->setCellValue('D1', 'Phone 2');
+            $sheet->setCellValue('E1', 'City');
+            $sheet->setCellValue('F1', 'Via');
+            $sheet->setCellValue('G1', 'Sales Person');
+            $sheet->setCellValue('H1', 'Type');
+            $sheet->setCellValue('I1', 'Visit Date');
+            $sheet->setCellValue('J1', 'Msg Count');
+            $sheet->setCellValue('K1', 'Messaging');
+            $sheet->setCellValue('L1', 'Start Date');
+            $sheet->setCellValue('M1', 'Stop Date');
+            $sheet->setCellValue('N1', 'Status');
 
             $row = 2;
             foreach ($customers as $i => $customer) {
                 $sheet->setCellValue('A' . $row, $i + 1);
                 $sheet->setCellValue('B' . $row, $customer->name);
                 $sheet->setCellValue('C' . $row, $customer->phone);
-                $sheet->setCellValue('D' . $row, $customer->city);
-                $sheet->setCellValue('E' . $row, optional($customer->salesPerson)->name);
-                $sheet->setCellValue('F' . $row, optional($customer->visit_date)->format('d/m/Y'));
-                $sheet->setCellValue('G' . $row, $customer->whatsapp_count);
-                $sheet->setCellValue('H' . $row, ucfirst($customer->messaging));
-                $sheet->setCellValue('I' . $row, optional($customer->messaging_started_at)->format('d/m/Y'));
-                $sheet->setCellValue('J' . $row, optional($customer->messaging_stopped_at)->format('d/m/Y'));
-                $sheet->setCellValue('K' . $row, ucfirst($customer->status));
+                $sheet->setCellValue('D' . $row, $customer->customer_phone_2);
+                $sheet->setCellValue('E' . $row, $customer->city);
+                $sheet->setCellValue('F' . $row, $customer->via);
+                $sheet->setCellValue('G' . $row, optional($customer->salesPerson)->name);
+                $sheet->setCellValue('H' . $row, ucfirst($customer->customer_type ?? ''));
+                $sheet->setCellValue('I' . $row, optional($customer->visit_date)->format('d/m/Y'));
+                $sheet->setCellValue('J' . $row, $customer->whatsapp_count);
+                $sheet->setCellValue('K' . $row, ucfirst($customer->messaging));
+                $sheet->setCellValue('L' . $row, optional($customer->messaging_started_at)->format('d/m/Y'));
+                $sheet->setCellValue('M' . $row, optional($customer->messaging_stopped_at)->format('d/m/Y'));
+                $sheet->setCellValue('N' . $row, ucfirst($customer->status));
                 $row++;
             }
 
@@ -332,8 +338,11 @@ class CustomerController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('city', 'like', "%{$search}%")
+                ->orWhere('phone', 'like', "%{$search}%")
+                ->orWhere('customer_phone_2', 'like', "%{$search}%")
+                ->orWhere('via', 'like', "%{$search}%")
+                ->orWhere('customer_type', 'like', "%{$search}%")
+                ->orWhere('city', 'like', "%{$search}%")
                     ->orWhereHas('salesPerson', function ($salesQuery) use ($search) {
                         $salesQuery->where('name', 'like', "%{$search}%");
                     });
@@ -355,9 +364,12 @@ class CustomerController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'phone' => $phoneRule,
+                'customer_phone_2' => 'nullable|digits:10',
+                'via' => 'nullable|string|max:255',
                 'city' => 'required|string|max:255',
                 'base_requirement' => 'nullable|string',
                 'sales_person_id' => 'required|exists:sales_persons,id',
+                'customer_type' => 'nullable|in:buyer,seller,both',
                 'visit_date' => 'nullable|date',
             ]);
 
@@ -368,12 +380,15 @@ class CustomerController extends Controller
             $data = $request->only([
                 'name',
                 'phone',
+                'customer_phone_2',
                 'city',
+                'via',
                 'base_requirement',
                 'sales_person_id',
+                'customer_type',
                 'visit_date',
             ]);
-            $data['status'] = 'active';
+            $data['status'] = $customer->status ?? 'active';
 
             if (!$customer->exists) {
                 $data['email'] = $this->makePlaceholderEmail($request->phone);

@@ -15,7 +15,9 @@ class Customer extends Model
         'name',
         'email',
         'phone',
+        'customer_phone_2',
         'city',
+        'via',
         'base_requirement',
         'visit_date',
         'whatsapp_count',
@@ -23,6 +25,7 @@ class Customer extends Model
         'messaging_started_at',
         'messaging_stopped_at',
         'status',
+        'customer_type',
     ];
 
     protected $casts = [

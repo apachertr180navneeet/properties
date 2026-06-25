@@ -4,8 +4,11 @@
             <tr>
                 <th>Name</th>
                 <th>Mobile</th>
+                <th>Phone 2</th>
                 <th>City</th>
+                <th>Via</th>
                 <th>Sales Person</th>
+                <th>Type</th>
                 <th>Msg Count</th>
                 <th>WhatsApp Service</th>
                 <th>Status</th>
@@ -17,8 +20,11 @@
                 <tr>
                     <td><span class="fw-semibold text-dark">{{ $customer->name }}</span></td>
                     <td>{{ $customer->phone ?? '-' }}</td>
+                    <td>{{ $customer->customer_phone_2 ?? '-' }}</td>
                     <td>{{ $customer->city ?? '-' }}</td>
+                    <td>{{ $customer->via ?? '-' }}</td>
                     <td>{{ optional($customer->salesPerson)->name ?? '-' }}</td>
+                    <td>{{ ucfirst($customer->customer_type ?? '-') }}</td>
                     <td class="text-center">
                         <span class="whatsapp-count-{{ $customer->id }} fw-semibold">{{ $customer->whatsapp_count }}</span>
                     </td>

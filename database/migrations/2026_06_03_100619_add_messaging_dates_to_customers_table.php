@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->timestamp('messaging_started_at')->nullable()->after('messaging');
-            $table->timestamp('messaging_stopped_at')->nullable()->after('messaging_started_at');
+            if (!Schema::hasColumn('customers', 'messaging_started_at')) {
+                $table->timestamp('messaging_started_at')->nullable()->after('messaging');
+            }
+            if (!Schema::hasColumn('customers', 'messaging_stopped_at')) {
+                $table->timestamp('messaging_stopped_at')->nullable()->after('messaging_started_at');
+            }
         });
     }
 

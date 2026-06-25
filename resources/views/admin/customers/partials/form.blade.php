@@ -21,9 +21,28 @@
             @error('phone')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-6">
+            <label class="form-label form-label-premium" for="customer_phone_2">Phone 2</label>
+            <input type="text" name="customer_phone_2" id="customer_phone_2" class="form-control premium-input @error('customer_phone_2') is-invalid @enderror" value="{{ old('customer_phone_2', $customer->customer_phone_2) }}" placeholder="Enter alternate phone number">
+            @error('customer_phone_2')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
             <label class="form-label form-label-premium" for="city">City</label>
             <input type="text" name="city" id="city" class="form-control premium-input @error('city') is-invalid @enderror" value="{{ old('city', $customer->city) }}" placeholder="Enter city">
             @error('city')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label class="form-label form-label-premium" for="via">Via</label>
+            <input type="text" name="via" id="via" class="form-control premium-input @error('via') is-invalid @enderror" value="{{ old('via', $customer->via) }}" placeholder="Enter source">
+            @error('via')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label class="form-label form-label-premium" for="customer_type">Type</label>
+            <select name="customer_type" id="customer_type" class="form-select premium-select @error('customer_type') is-invalid @enderror">
+                <option value="buyer" {{ old('customer_type', $customer->customer_type) === 'buyer' ? 'selected' : '' }}>Buyer</option>
+                <option value="seller" {{ old('customer_type', $customer->customer_type) === 'seller' ? 'selected' : '' }}>Seller</option>
+                <option value="both" {{ old('customer_type', $customer->customer_type) === 'both' ? 'selected' : '' }}>Both</option>
+            </select>
+            @error('customer_type')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-6">
             <label class="form-label form-label-premium" for="sales_person_id">Sales Person</label>
