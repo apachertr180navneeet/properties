@@ -366,7 +366,7 @@ class CustomerController extends Controller
                 'phone' => $phoneRule,
                 'customer_phone_2' => 'nullable|digits:10',
                 'via' => 'nullable|string|max:255',
-                'city' => 'required|string|max:255',
+                'city' => 'nullable|string|max:255',
                 'base_requirement' => 'nullable|string',
                 'sales_person_id' => 'required|exists:sales_persons,id',
                 'customer_type' => 'nullable|in:buyer,seller,both',

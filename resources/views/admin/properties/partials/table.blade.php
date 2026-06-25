@@ -4,6 +4,8 @@
             <tr>
                 <th style="width: 60px;">S.No.</th>
                 <th>Name</th>
+                <th>Owner Name</th>
+                <th>Owner Phone</th>
                 <th>Type</th>
                 <th>City</th>
                 <th>Amount</th>
@@ -21,6 +23,8 @@
                     <td>
                         <span class="fw-semibold text-dark">{{ $property->title }}</span>
                     </td>
+                    <td>{{ $property->owner_name ?? '-' }}</td>
+                    <td>{{ $property->owner_phone ?? '-' }}</td>
                     <td>{{ $property->property_type ?? '-' }}</td>
                     <td>{{ $property->city ?? '-' }}</td>
                     <td>
@@ -63,7 +67,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="text-center py-5 text-muted">
+                    <td colspan="9" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No properties found matching the search criteria.
                     </td>

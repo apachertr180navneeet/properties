@@ -35,5 +35,13 @@
         allowClear: true,
         width: '100%'
     });
+    $('#owner_name').select2({
+        placeholder: '— Select Seller —',
+        allowClear: true,
+        width: '100%'
+    }).on('change', function() {
+        var phone = $(this).find(':selected').data('phone') || '';
+        $('#owner_phone').val(phone);
+    });
 </script>
 @endsection

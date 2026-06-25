@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Property;
 use App\Models\SalesPerson;
 use App\Models\AreaMaster;
@@ -36,8 +37,9 @@ class PropertyController extends Controller
             $salespersons = SalesPerson::where('status', 'active')->orderBy('name')->get();
             $areas = AreaMaster::where('status', 'active')->orderBy('area_name')->get();
             $property = new Property();
+            $sellers = Customer::where('customer_type', 'seller')->orderBy('name')->get();
 
-            return view('admin.properties.create', compact('property', 'salespersons', 'areas'));
+            return view('admin.properties.create', compact('property', 'salespersons', 'areas', 'sellers'));
         } catch (Exception $e) { dd($e); }
     }
 
@@ -52,8 +54,9 @@ class PropertyController extends Controller
             $property = Property::findOrFail($id);
             $salespersons = SalesPerson::where('status', 'active')->orderBy('name')->get();
             $areas = AreaMaster::where('status', 'active')->orderBy('area_name')->get();
+            $sellers = Customer::where('customer_type', 'seller')->orderBy('name')->get();
 
-            return view('admin.properties.edit', compact('property', 'salespersons', 'areas'));
+            return view('admin.properties.edit', compact('property', 'salespersons', 'areas', 'sellers'));
         } catch (Exception $e) { dd($e); }
     }
 
@@ -222,6 +225,14 @@ class PropertyController extends Controller
             });
         }
 
+        if ($request->filled('owner')) {
+            $owner = $request->owner;
+            $query->where(function ($q) use ($owner) {
+                $q->where('owner_name', 'like', "%{$owner}%")
+                  ->orWhere('owner_phone', 'like', "%{$owner}%");
+            });
+        }
+
         return $query;
     }
 
@@ -235,22 +246,22 @@ class PropertyController extends Controller
                 'property_type' => 'nullable|string|max:255',
                 'property_category' => 'required|in:Residential,Commercial',
 
-                'city' => 'required|string|max:255',
-                'state' => 'required|string|max:255',
-                'address' => 'required|string',
-                'location' => 'required|string|max:255',
-                'pin_code' => 'required|string|max:20',
+                'city' => 'nullable|string|max:255',
+                'state' => 'nullable|string|max:255',
+                'address' => 'nullable|string',
+                'location' => 'nullable|string|max:255',
+                'pin_code' => 'nullable|string|max:20',
                 'plot_number' => 'nullable|string|max:255',
-                'area_size' => 'required|numeric|min:0',
-                'area_unit' => 'required|string|max:30',
-                'corner_plot' => 'required|in:Yes,No',
+                'area_size' => 'nullable|numeric|min:0',
+                'area_unit' => 'nullable|string|max:30',
+                'corner_plot' => 'nullable|in:Yes,No',
                 'length' => 'nullable|numeric|min:0',
                 'width' => 'nullable|numeric|min:0',
 
                 'facing' => 'nullable|in:East,West,North,South',
                 'remarks' => 'nullable|string',
                 'via' => 'nullable|string|max:255',
-                'price' => 'required|numeric|min:0',
+                'price' => 'nullable|numeric|min:0',
                 'sq_yard_rate' => 'nullable|numeric|min:0',
                 'stamp_duty' => 'nullable|numeric|min:0',
                 'registry_owner' => 'nullable|string|max:255',

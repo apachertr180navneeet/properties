@@ -269,6 +269,7 @@
                         @endforeach
                     </select>
                 </div>
+
                 <div class="filter-actions">
                     <button type="button" class="btn btn-outline-secondary" id="reset-btn" style="padding: 0.6rem 1.5rem; border-radius: 8px; font-weight: 500;">
                         <i class="bx bx-reset"></i> Reset

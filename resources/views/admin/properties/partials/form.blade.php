@@ -3,12 +3,40 @@
     @method('PUT')
 @endif
 
+<!-- Owner Information -->
+<div class="form-section">
+    <div class="form-section-title">Owner Information</div>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label form-label-premium" for="owner_name">Owner Name <a href="{{ url('admin/customers/create') }}" style="font-weight:400;font-size:.75rem;">(add)</a></label>
+            <select name="owner_name" id="owner_name" class="form-select premium-select @error('owner_name') is-invalid @enderror">
+                <option value="">— Select Seller —</option>
+                @foreach($sellers as $seller)
+                    <option value="{{ $seller->name }}" data-phone="{{ $seller->phone }}" {{ old('owner_name', $property->owner_name) === $seller->name ? 'selected' : '' }}>{{ $seller->name }}</option>
+                @endforeach
+            </select>
+            @error('owner_name')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-4">
+            <label class="form-label form-label-premium" for="owner_phone">Owner Phone</label>
+            <input type="text" name="owner_phone" id="owner_phone" class="form-control premium-input @error('owner_phone') is-invalid @enderror" value="{{ old('owner_phone', $property->owner_phone) }}" placeholder="Enter owner phone" readonly>
+            @error('owner_phone')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label form-label-premium" for="via">Via</label>
+            <input type="text" name="via" id="via" class="form-control premium-input @error('via') is-invalid @enderror" value="{{ old('via', $property->via) }}" placeholder="Enter source">
+            @error('via')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+    </div>
+</div>
+
 <!-- Basic Information -->
 <div class="form-section">
     <div class="form-section-title">Basic Information</div>
     <div class="row g-3">
         <div class="col-md-6">
-            <label class="form-label form-label-premium" for="sales_person_ids">Sales Person <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="sales_person_ids">Sales Person <a href="{{ url('admin/salespersons') }}" style="font-weight:400;font-size:.75rem;">(add)</a></label>
             <select name="sales_person_ids[]" id="sales_person_ids" class="form-select premium-select @error('sales_person_ids') is-invalid @enderror" multiple>
                 @foreach($salespersons as $sp)
                     <option value="{{ $sp->id }}" {{ in_array($sp->id, old('sales_person_ids', $property->salesPersons->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>{{ $sp->name }}</option>
@@ -17,7 +45,7 @@
             @error('sales_person_ids')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-4">
-            <label class="form-label form-label-premium" for="title">Property Name <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="title">Property Name </label>
             <input type="text" name="title" id="title" class="form-control premium-input @error('title') is-invalid @enderror" value="{{ old('title', $property->title) }}" placeholder="Enter property name">
             @error('title')<span class="error-text">{{ $message }}</span>@enderror
         </div>
@@ -27,7 +55,7 @@
             @error('property_type')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-4">
-            <label class="form-label form-label-premium" for="property_category">Category <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="property_category">Category </label>
             <select name="property_category" id="property_category" class="form-select premium-select @error('property_category') is-invalid @enderror">
                 @foreach(['Residential', 'Commercial'] as $cat)
                     <option value="{{ $cat }}" {{ old('property_category', $property->property_category ?? 'Residential') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
@@ -68,7 +96,7 @@
             @error('area_unit')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-3">
-            <label class="form-label form-label-premium" for="area_size">Area Size <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="area_size">Area Size </label>
             <input type="number" step="0.01" min="0" name="area_size" id="area_size" class="form-control premium-input @error('area_size') is-invalid @enderror" value="{{ old('area_size', $property->area_size) }}" placeholder="e.g. 1500">
             @error('area_size')<span class="error-text">{{ $message }}</span>@enderror
         </div>
@@ -99,35 +127,12 @@
     </div>
 </div>
 
-<!-- Owner Information -->
-<div class="form-section">
-    <div class="form-section-title">Owner Information</div>
-    <div class="row g-3">
-        <div class="col-md-4">
-            <label class="form-label form-label-premium" for="owner_name">Owner Name</label>
-            <input type="text" name="owner_name" id="owner_name" class="form-control premium-input @error('owner_name') is-invalid @enderror" value="{{ old('owner_name', $property->owner_name) }}" placeholder="Enter owner name">
-            @error('owner_name')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
-        <div class="col-md-4">
-            <label class="form-label form-label-premium" for="owner_phone">Owner Phone</label>
-            <input type="text" name="owner_phone" id="owner_phone" class="form-control premium-input @error('owner_phone') is-invalid @enderror" value="{{ old('owner_phone', $property->owner_phone) }}" placeholder="Enter owner phone">
-            @error('owner_phone')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
-
-        <div class="col-md-4">
-            <label class="form-label form-label-premium" for="via">Via</label>
-            <input type="text" name="via" id="via" class="form-control premium-input @error('via') is-invalid @enderror" value="{{ old('via', $property->via) }}" placeholder="Enter source">
-            @error('via')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
-    </div>
-</div>
-
 <!-- Pricing & Dates -->
 <div class="form-section">
     <div class="form-section-title">Pricing & Dates</div>
     <div class="row g-3">
         <div class="col-md-4">
-            <label class="form-label form-label-premium" for="price">Full Amount <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="price">Full Amount </label>
             <input type="number" step="0.01" min="0" name="price" id="price" class="form-control premium-input @error('price') is-invalid @enderror" value="{{ old('price', $property->price) }}" placeholder="e.g. 5000000">
             @error('price')<span class="error-text">{{ $message }}</span>@enderror
         </div>
@@ -154,22 +159,22 @@
     <div class="form-section-title">Location Details</div>
     <div class="row g-3">
         <div class="col-md-4">
-            <label class="form-label form-label-premium" for="city">City <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="city">City </label>
             <input type="text" name="city" id="city" class="form-control premium-input @error('city') is-invalid @enderror" value="{{ old('city', $property->city) }}" placeholder="Enter city">
             @error('city')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-4">
-            <label class="form-label form-label-premium" for="state">State <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="state">State </label>
             <input type="text" name="state" id="state" class="form-control premium-input @error('state') is-invalid @enderror" value="{{ old('state', $property->state) }}" placeholder="Enter state">
             @error('state')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-4">
-            <label class="form-label form-label-premium" for="pin_code">Pin Code <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="pin_code">Pin Code </label>
             <input type="text" name="pin_code" id="pin_code" class="form-control premium-input @error('pin_code') is-invalid @enderror" value="{{ old('pin_code', $property->pin_code) }}" placeholder="Enter pin code">
             @error('pin_code')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-6">
-            <label class="form-label form-label-premium" for="location">Location <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="location">Location </label>
             <select name="location" id="location" class="form-select premium-select @error('location') is-invalid @enderror">
                 <option value="">— Select —</option>
                 @foreach($areas as $area)
@@ -179,7 +184,7 @@
             @error('location')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-6">
-            <label class="form-label form-label-premium" for="address">Address <span class="text-danger">*</span></label>
+            <label class="form-label form-label-premium" for="address">Address </label>
             <input type="text" name="address" id="address" class="form-control premium-input @error('address') is-invalid @enderror" value="{{ old('address', $property->address) }}" placeholder="Enter full address">
             @error('address')<span class="error-text">{{ $message }}</span>@enderror
         </div>

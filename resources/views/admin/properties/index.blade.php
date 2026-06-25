@@ -179,6 +179,9 @@
                 <div class="filter-item-search">
                     <input type="text" name="search" class="form-control premium-input" id="filter-search" placeholder="Search here" value="{{ request('search') }}">
                 </div>
+                <div class="filter-item-limit" style="flex: 0 0 180px;">
+                    <input type="text" name="owner" class="form-control premium-input" id="filter-owner" placeholder="Search owner" value="{{ request('owner') }}">
+                </div>
                 <div class="filter-actions">
                     <button type="submit" class="btn btn-premium">
                         <i class="bx bx-search"></i> Search
@@ -297,6 +300,11 @@
         });
 
         document.getElementById('filter-limit').addEventListener('change', refreshTable);
+
+        document.getElementById('filter-owner').addEventListener('input', function() {
+            clearTimeout(this._timer);
+            this._timer = setTimeout(refreshTable, 400);
+        });
 
         document.addEventListener('click', function(e) {
             const link = e.target.closest('.pagination a');
