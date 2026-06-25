@@ -113,7 +113,10 @@ class ReportController extends Controller
 
     private function filteredShowings(Request $request)
     {
-        $query = PropertyShowing::with(['property', 'salesPerson', 'customer']);
+        $query = PropertyShowing::with(['property', 'salesPerson', 'customer'])
+            ->whereHas('property', fn($q) => $q->whereNotNull('title')->where('title', '!=', ''))
+            ->whereHas('salesPerson', fn($q) => $q->whereNotNull('name')->where('name', '!=', ''))
+            ->whereHas('customer', fn($q) => $q->whereNotNull('name')->where('name', '!=', ''));
 
         if ($request->filled('sales_person_id')) {
             $query->where('sales_person_id', $request->sales_person_id);
