@@ -31,6 +31,7 @@ class SalesPersonController extends Controller
                 $query->where(function($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                       ->orWhere('phone', 'like', "%{$search}%")
+                      ->orWhere('phone_2', 'like', "%{$search}%")
                       ->orWhere('city', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%");
                 });
@@ -58,6 +59,7 @@ class SalesPersonController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'nullable|email',
                 'phone' => 'required|string|digits:10|unique:sales_persons,phone',
+                'phone_2' => 'nullable|string|digits:10',
                 'city' => 'required|string|max:255',
             ]);
 
@@ -69,7 +71,7 @@ class SalesPersonController extends Controller
             }
 
             SalesPerson::create(array_merge(
-                $request->only(['name', 'email', 'phone', 'city']),
+                $request->only(['name', 'email', 'phone', 'phone_2', 'city']),
                 ['status' => 'active']
             ));
 
@@ -117,6 +119,7 @@ class SalesPersonController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'nullable|email',
                 'phone' => 'required|string|digits:10|unique:sales_persons,phone,' . $id,
+                'phone_2' => 'nullable|string|digits:10',
                 'city' => 'required|string|max:255',
             ]);
 
@@ -127,7 +130,7 @@ class SalesPersonController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $salesperson->update($request->only(['name', 'email', 'phone', 'city']));
+            $salesperson->update($request->only(['name', 'email', 'phone', 'phone_2', 'city']));
 
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json(['success' => true, 'message' => 'Salesperson updated successfully!']);
@@ -182,6 +185,7 @@ class SalesPersonController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('phone', 'like', "%{$search}%")
+                      ->orWhere('phone_2', 'like', "%{$search}%")
                   ->orWhere('city', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%");
             });
@@ -208,6 +212,7 @@ class SalesPersonController extends Controller
                 $query->where(function($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                       ->orWhere('phone', 'like', "%{$search}%")
+                      ->orWhere('phone_2', 'like', "%{$search}%")
                       ->orWhere('city', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%");
                 });
@@ -221,10 +226,11 @@ class SalesPersonController extends Controller
             $sheet->setCellValue('B1', 'Name');
             $sheet->setCellValue('C1', 'Email');
             $sheet->setCellValue('D1', 'Phone');
-            $sheet->setCellValue('E1', 'City');
-            $sheet->setCellValue('F1', 'Properties');
-            $sheet->setCellValue('G1', 'Customers');
-            $sheet->setCellValue('H1', 'Status');
+            $sheet->setCellValue('E1', 'Phone 2');
+            $sheet->setCellValue('F1', 'City');
+            $sheet->setCellValue('G1', 'Properties');
+            $sheet->setCellValue('H1', 'Customers');
+            $sheet->setCellValue('I1', 'Status');
 
             $row = 2;
             foreach ($salespersons as $i => $sp) {
@@ -232,10 +238,11 @@ class SalesPersonController extends Controller
                 $sheet->setCellValue('B' . $row, $sp->name);
                 $sheet->setCellValue('C' . $row, $sp->email);
                 $sheet->setCellValue('D' . $row, $sp->phone);
-                $sheet->setCellValue('E' . $row, $sp->city);
-                $sheet->setCellValue('F' . $row, $sp->properties_count);
-                $sheet->setCellValue('G' . $row, $sp->customers_count);
-                $sheet->setCellValue('H' . $row, ucfirst($sp->status));
+                $sheet->setCellValue('E' . $row, $sp->phone_2);
+                $sheet->setCellValue('F' . $row, $sp->city);
+                $sheet->setCellValue('G' . $row, $sp->properties_count);
+                $sheet->setCellValue('H' . $row, $sp->customers_count);
+                $sheet->setCellValue('I' . $row, ucfirst($sp->status));
                 $row++;
             }
 

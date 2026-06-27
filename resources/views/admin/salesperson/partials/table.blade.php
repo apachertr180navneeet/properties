@@ -5,6 +5,7 @@
                 <th style="width:60px;">S.No.</th>
                 <th>Name</th>
                 <th>Mobile</th>
+                <th>Alternate Mobile</th>
                 <th>City</th>
                 <th class="text-center">Assign Customer</th>
                 <th class="text-center">Properties</th>
@@ -24,6 +25,9 @@
                     </td>
                     <td>
                         <span class="text-secondary fw-medium">{{ $salesperson->phone ?? 'N/A' }}</span>
+                    </td>
+                    <td>
+                        <span class="text-secondary fw-medium">{{ $salesperson->phone_2 ?? 'N/A' }}</span>
                     </td>
                     <td>
                         <span class="text-secondary">{{ $salesperson->city ?? 'N/A' }}</span>
@@ -57,7 +61,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8" class="text-center py-5 text-muted">
+                    <td colspan="9" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No Sales Persons found matching the search criteria.
                     </td>

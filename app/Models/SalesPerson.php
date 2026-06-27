@@ -12,7 +12,7 @@ class SalesPerson extends Model
 
     protected $table = 'sales_persons';
 
-    protected $fillable = ['name', 'email', 'phone', 'city', 'status'];
+    protected $fillable = ['name', 'email', 'phone', 'phone_2', 'city', 'status'];
 
     public function properties()
     {

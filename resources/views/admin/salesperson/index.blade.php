@@ -522,6 +522,15 @@
                                 </div>
                             </div>
 
+                            <!-- Mobile Number 2 -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label form-label-premium" for="form_phone_2">Alternate Mobile Number:</label>
+                                    <input type="text" name="phone_2" id="form_phone_2" class="form-control premium-input" placeholder="Enter Alternate Mobile Number">
+                                    <div class="invalid-feedback" id="form_phone_2_error"></div>
+                                </div>
+                            </div>
+
                             <!-- Email Address -->
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -576,6 +585,10 @@
                     <div class="detail-item">
                         <label>Mobile Number</label>
                         <span id="detailPhone">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Alternate Mobile</label>
+                        <span id="detailPhone2">-</span>
                     </div>
                     <div class="detail-item">
                         <label>City</label>
@@ -667,6 +680,7 @@
 
         document.getElementById('form_name').value = salesperson.name;
         document.getElementById('form_phone').value = salesperson.phone || '';
+        document.getElementById('form_phone_2').value = salesperson.phone_2 || '';
         document.getElementById('form_email').value = salesperson.email;
         document.getElementById('form_city').value = salesperson.city || '';
 
@@ -685,6 +699,7 @@
 
         document.getElementById('form_name').value = '';
         document.getElementById('form_phone').value = '';
+        document.getElementById('form_phone_2').value = '';
         document.getElementById('form_email').value = '';
         document.getElementById('form_city').value = '';
 
@@ -862,6 +877,7 @@
                     document.getElementById('modalSalesPersonName').innerText = `${salesperson.name} - Profile Details`;
                     document.getElementById('detailEmail').innerText = salesperson.email;
                     document.getElementById('detailPhone').innerText = salesperson.phone || 'N/A';
+                    document.getElementById('detailPhone2').innerText = salesperson.phone_2 || 'N/A';
                     document.getElementById('detailCity').innerText = salesperson.city || 'N/A';
                     
                     const statusBadge = salesperson.status === 'active' 
