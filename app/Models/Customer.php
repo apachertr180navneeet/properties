@@ -20,6 +20,7 @@ class Customer extends Model
         'via',
         'base_requirement',
         'visit_date',
+        'follow_up_date',
         'whatsapp_count',
         'messaging',
         'messaging_started_at',
@@ -30,6 +31,7 @@ class Customer extends Model
 
     protected $casts = [
         'visit_date' => 'date',
+        'follow_up_date' => 'date',
         'messaging_started_at' => 'datetime',
         'messaging_stopped_at' => 'datetime',
     ];

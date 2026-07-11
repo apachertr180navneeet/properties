@@ -372,6 +372,7 @@ class CustomerController extends Controller
                 'sales_person_id' => 'required|exists:sales_persons,id',
                 'customer_type' => 'nullable|in:buyer,seller,both',
                 'visit_date' => 'nullable|date',
+                'follow_up_date' => 'nullable|date',
             ]);
 
             if ($validator->fails()) {
@@ -388,6 +389,7 @@ class CustomerController extends Controller
                 'sales_person_id',
                 'customer_type',
                 'visit_date',
+                'follow_up_date',
             ]);
             $data['status'] = $customer->status ?? 'active';
 

@@ -5,10 +5,9 @@
                 <th>Name</th>
                 <th>Mobile</th>
                 <th>Phone 2</th>
-                <th>City</th>
-                <th>Via</th>
                 <th>Sales Person</th>
                 <th>Type</th>
+                <th>Follow Up</th>
                 <th>Msg Count</th>
                 <th>WhatsApp Service</th>
                 <th>Status</th>
@@ -21,10 +20,9 @@
                     <td><span class="fw-semibold text-dark">{{ $customer->name }}</span></td>
                     <td>{{ $customer->phone ?? '-' }}</td>
                     <td>{{ $customer->customer_phone_2 ?? '-' }}</td>
-                    <td>{{ $customer->city ?? '-' }}</td>
-                    <td>{{ $customer->via ?? '-' }}</td>
                     <td>{{ optional($customer->salesPerson)->name ?? '-' }}</td>
                     <td>{{ ucfirst($customer->customer_type ?? '-') }}</td>
+                    <td>{{ optional($customer->follow_up_date)->format('d-m-Y') ?? '-' }}</td>
                     <td class="text-center">
                         <span class="whatsapp-count-{{ $customer->id }} fw-semibold">{{ $customer->whatsapp_count }}</span>
                     </td>
@@ -65,7 +63,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="11" class="text-center py-5 text-muted">
+                    <td colspan="10" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No customers found matching the search criteria.
                     </td>

@@ -25,11 +25,7 @@
             <input type="text" name="customer_phone_2" id="customer_phone_2" class="form-control premium-input @error('customer_phone_2') is-invalid @enderror" value="{{ old('customer_phone_2', $customer->customer_phone_2) }}" placeholder="Enter alternate phone number">
             @error('customer_phone_2')<span class="error-text">{{ $message }}</span>@enderror
         </div>
-        <div class="col-md-6">
-            <label class="form-label form-label-premium" for="city">City</label>
-            <input type="text" name="city" id="city" class="form-control premium-input @error('city') is-invalid @enderror" value="{{ old('city', $customer->city) }}" placeholder="Enter city">
-            @error('city')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
+
         <div class="col-md-6">
             <label class="form-label form-label-premium" for="via">Via</label>
             <input type="text" name="via" id="via" class="form-control premium-input @error('via') is-invalid @enderror" value="{{ old('via', $customer->via) }}" placeholder="Enter source">
@@ -72,6 +68,16 @@
             <label class="form-label form-label-premium" for="visit_date">Visit Date</label>
             <input type="date" name="visit_date" id="visit_date" class="form-control premium-input @error('visit_date') is-invalid @enderror" value="{{ old('visit_date', optional($customer->visit_date)->format('Y-m-d')) }}">
             @error('visit_date')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label class="form-label form-label-premium" for="follow_up_date">Follow Up Date</label>
+            <input type="date" name="follow_up_date" id="follow_up_date" class="form-control premium-input @error('follow_up_date') is-invalid @enderror" value="{{ old('follow_up_date', optional($customer->follow_up_date)->format('Y-m-d')) }}">
+            @error('follow_up_date')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-6">
+            <label class="form-label form-label-premium" for="city">City</label>
+            <input type="text" name="city" id="city" class="form-control premium-input @error('city') is-invalid @enderror" value="{{ old('city', $customer->city) }}" placeholder="Enter city">
+            @error('city')<span class="error-text">{{ $message }}</span>@enderror
         </div>
     </div>
 </div>
