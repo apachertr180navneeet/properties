@@ -2,7 +2,7 @@
     <table class="table table-premium align-middle">
         <thead>
             <tr>
-                <th style="width: 60px;">#</th>
+                <th style="width: 60px;">S.No.</th>
                 <th>Date</th>
                 <th>Party Name</th>
                 <th style="width: 180px;">Action</th>
@@ -12,7 +12,7 @@
             @forelse($customers as $customer)
                 <tr>
                     <td>
-                        <span class="text-muted fw-semibold">{{ $customers->firstItem() + $loop->index }}</span>
+                        <span class="text-muted fw-medium">{{ $customers->firstItem() + $loop->index }}</span>
                     </td>
                     <td>
                         <span class="fw-semibold text-dark">
@@ -27,9 +27,11 @@
                         <span class="fw-semibold text-dark">{{ $customer->name }}</span>
                     </td>
                     <td>
-                        <a href="{{ route('admin.random_properties.edit', $customer->id) }}" class="btn btn-sm btn-primary">
-                            Edit
-                        </a>
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="{{ route('admin.random_properties.show', $customer->id) }}" class="btn btn-sm btn-outline-info">
+                                <i class="bx bx-show"></i> Show
+                            </a>
+                        </div>
                     </td>
                 </tr>
             @empty

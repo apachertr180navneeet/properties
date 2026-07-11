@@ -50,4 +50,9 @@ class Customer extends Model
     {
         return $this->hasMany(PropertyShowing::class);
     }
+
+    public function randomProperties()
+    {
+        return $this->hasMany(RandomProperty::class);
+    }
 }

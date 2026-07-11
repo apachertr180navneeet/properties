@@ -142,4 +142,26 @@ class RandomPropertyController extends Controller
             return back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
+
+    public function show($customerId)
+    {
+        try {
+            $selectedCustomer = Customer::findOrFail($customerId);
+            $randomProperties = RandomProperty::where('customer_id', $customerId)->orderBy('date', 'desc')->get();
+            
+            return view('admin.random_properties.show', compact('randomProperties', 'selectedCustomer'));
+        } catch (Exception $e) {
+            return back()->with('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
+    public function getByCustomer($customerId)
+    {
+        try {
+            $randomProperties = RandomProperty::where('customer_id', $customerId)->orderBy('date', 'desc')->get();
+            return response()->json(['success' => true, 'data' => $randomProperties]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }

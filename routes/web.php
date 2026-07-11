@@ -266,14 +266,16 @@ Route::name('admin.')->prefix('admin')->group(function () {
         Route::get('reports/showings-export', [\App\Http\Controllers\Admin\ReportController::class, 'exportExcel'])->name('reports.showings.export');
         // Random Properties routes
         Route::get('random_properties-table', [\App\Http\Controllers\Admin\RandomPropertyController::class, 'getTable'])->name('random_properties.table');
+        Route::get('random_properties/get-by-customer/{customerId}', [\App\Http\Controllers\Admin\RandomPropertyController::class, 'getByCustomer'])->name('random_properties.get-by-customer');
         Route::resource('random_properties', \App\Http\Controllers\Admin\RandomPropertyController::class)->names([
             'index'   => 'random_properties.index',
             'create'  => 'random_properties.create',
             'store'   => 'random_properties.store',
             'edit'    => 'random_properties.edit',
+            'show'    => 'random_properties.show',
             'update'  => 'random_properties.update',
             'destroy' => 'random_properties.destroy',
-        ])->except(['show', 'update']); // we are handling bulk update via store for edit
+        ])->except(['update']); // we are handling bulk update via store for edit
 
     });
 
