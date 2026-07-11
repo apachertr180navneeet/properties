@@ -22,6 +22,16 @@
             <input type="text" name="owner_phone" id="owner_phone" class="form-control premium-input @error('owner_phone') is-invalid @enderror" value="{{ old('owner_phone', $property->owner_phone) }}" placeholder="Enter owner phone" readonly>
             @error('owner_phone')<span class="error-text">{{ $message }}</span>@enderror
         </div>
+        <div class="col-md-4">
+            <label class="form-label form-label-premium" for="location">Property location <a href="{{ url('admin/areamaster/create') }}" style="font-weight:400;font-size:.75rem;">(add)</a></label>
+            <select name="location" id="location" class="form-select premium-select @error('location') is-invalid @enderror">
+                <option value="">— Select —</option>
+                @foreach($areas as $area)
+                    <option value="{{ $area->area_name }}" {{ old('location', $property->location) === $area->area_name ? 'selected' : '' }}>{{ $area->area_name }}</option>
+                @endforeach
+            </select>
+            @error('location')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
 
         <div class="col-md-4">
             <label class="form-label form-label-premium" for="via">Via</label>
@@ -174,17 +184,7 @@
             <input type="text" name="pin_code" id="pin_code" class="form-control premium-input @error('pin_code') is-invalid @enderror" value="{{ old('pin_code', $property->pin_code) }}" placeholder="Enter pin code">
             @error('pin_code')<span class="error-text">{{ $message }}</span>@enderror
         </div>
-        <div class="col-md-6">
-            <label class="form-label form-label-premium" for="location">Location </label>
-            <select name="location" id="location" class="form-select premium-select @error('location') is-invalid @enderror">
-                <option value="">— Select —</option>
-                @foreach($areas as $area)
-                    <option value="{{ $area->area_name }}" {{ old('location', $property->location) === $area->area_name ? 'selected' : '' }}>{{ $area->area_name }}</option>
-                @endforeach
-            </select>
-            @error('location')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <label class="form-label form-label-premium" for="address">Address </label>
             <input type="text" name="address" id="address" class="form-control premium-input @error('address') is-invalid @enderror" value="{{ old('address', $property->address) }}" placeholder="Enter full address">
             @error('address')<span class="error-text">{{ $message }}</span>@enderror

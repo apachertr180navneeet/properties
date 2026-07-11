@@ -6,8 +6,6 @@
                 <th>Name</th>
                 <th>Owner Name</th>
                 <th>Owner Phone</th>
-                <th>Type</th>
-                <th>City</th>
                 <th>Amount</th>
                 <th>Sales Person</th>
                 <th>Status</th>
@@ -25,8 +23,6 @@
                     </td>
                     <td>{{ $property->owner_name ?? '-' }}</td>
                     <td>{{ $property->owner_phone ?? '-' }}</td>
-                    <td>{{ $property->property_type ?? '-' }}</td>
-                    <td>{{ $property->city ?? '-' }}</td>
                     <td>
                         @if($property->price)
                             {{ rtrim(rtrim(number_format($property->price / 100000, 2), '0'), '.') }}L
@@ -67,7 +63,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="text-center py-5 text-muted">
+                    <td colspan="8" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No properties found matching the search criteria.
                     </td>
