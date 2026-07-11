@@ -37,6 +37,12 @@
 				<div data-i18n="Properties">Properties</div>
 			</a>
 		</li>
+		<li class="menu-item {{ request()->is('admin/random_properties*') ? 'active' : ''}}">
+			<a href="{{route('admin.random_properties.index')}}" class="menu-link">
+				<i class="menu-icon tf-icons bx bx-list-ol"></i>
+				<div data-i18n="Random Properties">Random Properties</div>
+			</a>
+		</li>
 		<li class="menu-item {{ request()->is('admin/customers*') ? 'active' : ''}}">
 			<a href="{{route('admin.customers.index')}}" class="menu-link">
 				<i class="menu-icon tf-icons bx bx-user"></i>
