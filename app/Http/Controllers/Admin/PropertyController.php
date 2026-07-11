@@ -21,6 +21,7 @@ class PropertyController extends Controller
     {
         try {
             $properties = $this->filteredProperties($request)
+                ->orderBy('status', 'asc')
                 ->orderBy('id', 'desc')
                 ->paginate($request->get('limit', 10))
                 ->withQueryString();
@@ -244,7 +245,7 @@ class PropertyController extends Controller
                 'owner_name' => 'nullable|string|max:255',
                 'owner_phone' => 'nullable|string|max:20',
                 'property_type' => 'nullable|string|max:255',
-                'property_category' => 'required|in:Residential,Commercial',
+                'property_category' => 'required|in:Residential,Commercial,Agriculture',
 
                 'city' => 'nullable|string|max:255',
                 'state' => 'nullable|string|max:255',
@@ -267,7 +268,7 @@ class PropertyController extends Controller
                 'registry_owner' => 'nullable|string|max:255',
                 'setup_type' => 'nullable|in:Fully Furnished,Semi Furnished,Maintained',
                 'add_on_date' => 'nullable|date',
-                'build_type' => 'nullable|in:Plot,Villa',
+                'build_type' => 'nullable|in:Plot,Villa,Shop',
                 'property_condition' => 'nullable|in:Used,Unused',
                 'construction_type' => 'nullable|in:New,Old',
                 'property_age' => 'nullable|string|max:255',

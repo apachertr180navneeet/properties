@@ -38,7 +38,7 @@ class SalesPersonController extends Controller
             }
 
             $limit = $request->get('limit', 10);
-            $salespersons = $query->orderBy('name', 'asc')->paginate($limit)->withQueryString();
+$salespersons = $query->orderBy('status', 'asc')->orderBy('name', 'asc')->paginate($limit)->withQueryString();
             
             // Pluck names for the dropdown
             $names = SalesPerson::orderBy('name')->pluck('name')->unique();
@@ -192,7 +192,7 @@ class SalesPersonController extends Controller
         }
 
         $limit = $request->get('limit', 10);
-        $salespersons = $query->orderBy('name', 'asc')->paginate($limit)->withQueryString();
+$salespersons = $query->orderBy('status', 'asc')->orderBy('name', 'asc')->paginate($limit)->withQueryString();
 
         $html = view('admin.salesperson.partials.table', compact('salespersons'))->render();
         return response()->json(['success' => true, 'html' => $html]);

@@ -21,6 +21,7 @@ class CustomerController extends Controller
     {
         try {
             $customers = $this->filteredCustomers($request)
+                ->orderBy('status', 'asc')
                 ->orderBy('id', 'desc')
                 ->paginate($request->get('limit', 10))
                 ->withQueryString();

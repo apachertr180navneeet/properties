@@ -398,6 +398,8 @@
             const checkbox = e.target.closest('.toggle-status');
             if (!checkbox) return;
             const id = checkbox.dataset.id;
+            const tr = checkbox.closest('tr');
+            const tbody = tr.closest('tbody');
             checkbox.disabled = true;
             fetch('/admin/customers/' + id + '/toggle-status', {
                 method: 'POST',
@@ -408,6 +410,11 @@
                 checkbox.disabled = false;
                 if (res.success) {
                     checkbox.checked = res.status === 'active';
+                    if (res.status === 'inactive') {
+                        tbody.appendChild(tr);
+                    } else {
+                        tbody.insertBefore(tr, tbody.firstChild);
+                    }
                     showToast(res.message, 'success');
                 } else {
                     checkbox.checked = !checkbox.checked;

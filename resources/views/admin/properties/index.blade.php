@@ -246,6 +246,13 @@
                             p.className = 'badge status-pill bg-label-success';
                         }
                     });
+                    const tr = group.closest('tr');
+                    const tbody = tr.closest('tbody');
+                    if (res.status === 'available') {
+                        tbody.insertBefore(tr, tbody.firstChild);
+                    } else {
+                        tbody.appendChild(tr);
+                    }
                     showToast(res.message, 'success');
                 } else {
                     showToast(res.message || 'Error.', 'error');

@@ -57,7 +57,7 @@
         <div class="col-md-4">
             <label class="form-label form-label-premium" for="property_category">Category </label>
             <select name="property_category" id="property_category" class="form-select premium-select @error('property_category') is-invalid @enderror">
-                @foreach(['Residential', 'Commercial'] as $cat)
+                @foreach(['Residential', 'Commercial', 'Agriculture'] as $cat)
                     <option value="{{ $cat }}" {{ old('property_category', $property->property_category ?? 'Residential') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
                 @endforeach
             </select>
@@ -116,6 +116,7 @@
                 <option value="">— Select —</option>
                 <option value="Plot" {{ old('build_type', $property->build_type) === 'Plot' ? 'selected' : '' }}>Plot</option>
                 <option value="Villa" {{ old('build_type', $property->build_type) === 'Villa' ? 'selected' : '' }}>Villa</option>
+                <option value="Shop" {{ old('build_type', $property->build_type) === 'Shop' ? 'selected' : '' }}>Shop</option>
             </select>
             @error('build_type')<span class="error-text">{{ $message }}</span>@enderror
         </div>
@@ -220,6 +221,11 @@
                     @endif
                 </div>
             @endif
+        </div>
+        <div class="col-md-12 mt-3">
+            <label class="form-label form-label-premium" for="remarks">Remarks</label>
+            <textarea name="remarks" id="remarks" class="form-control premium-input @error('remarks') is-invalid @enderror" rows="3" placeholder="Enter any remarks...">{{ old('remarks', $property->remarks) }}</textarea>
+            @error('remarks')<span class="error-text">{{ $message }}</span>@enderror
         </div>
     </div>
 </div>
