@@ -179,8 +179,11 @@
                 <div class="filter-item-search">
                     <input type="text" name="search" class="form-control premium-input" id="filter-search" placeholder="Search here" value="{{ request('search') }}">
                 </div>
-                <div class="filter-item-limit" style="flex: 0 0 180px;">
+                <div class="filter-item-limit" style="flex: 0 0 160px;">
                     <input type="text" name="owner" class="form-control premium-input" id="filter-owner" placeholder="Search owner" value="{{ request('owner') }}">
+                </div>
+                <div class="filter-item-limit" style="flex: 0 0 140px;">
+                    <input type="text" name="rate" class="form-control premium-input" id="filter-rate" placeholder="Search rate" value="{{ request('rate') }}">
                 </div>
                 <div class="filter-actions">
                     <button type="submit" class="btn btn-premium">
@@ -309,6 +312,11 @@
         document.getElementById('filter-limit').addEventListener('change', refreshTable);
 
         document.getElementById('filter-owner').addEventListener('input', function() {
+            clearTimeout(this._timer);
+            this._timer = setTimeout(refreshTable, 400);
+        });
+
+        document.getElementById('filter-rate').addEventListener('input', function() {
             clearTimeout(this._timer);
             this._timer = setTimeout(refreshTable, 400);
         });

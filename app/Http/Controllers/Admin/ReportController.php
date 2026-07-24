@@ -59,9 +59,11 @@ class ReportController extends Controller
             // Set Headers
             $sheet->setCellValue('A1', 'S.No');
             $sheet->setCellValue('B1', 'Property Name');
-            $sheet->setCellValue('C1', 'Sales Person');
-            $sheet->setCellValue('D1', 'Customer');
-            $sheet->setCellValue('E1', 'Show Date');
+            $sheet->setCellValue('C1', 'Build Type');
+            $sheet->setCellValue('D1', 'Rate');
+            $sheet->setCellValue('E1', 'Sales Person');
+            $sheet->setCellValue('F1', 'Customer');
+            $sheet->setCellValue('G1', 'Show Date');
 
             // Set Header Styling
             $headerStyle = [
@@ -77,26 +79,28 @@ class ReportController extends Controller
                     'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 ],
             ];
-            $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
+            $sheet->getStyle('A1:G1')->applyFromArray($headerStyle);
 
             // Set Data
             $row = 2;
             foreach ($showings as $i => $showing) {
                 $sheet->setCellValue('A' . $row, $i + 1);
                 $sheet->setCellValue('B' . $row, optional($showing->property)->title ?? 'N/A');
-                $sheet->setCellValue('C' . $row, optional($showing->salesPerson)->name ?? 'N/A');
-                $sheet->setCellValue('D' . $row, optional($showing->customer)->name ?? 'N/A');
-                $sheet->setCellValue('E' . $row, optional($showing->show_date)->format('d/m/Y') ?? 'N/A');
+                $sheet->setCellValue('C' . $row, optional($showing->property)->build_type ?? 'N/A');
+                $sheet->setCellValue('D' . $row, optional($showing->property)->sq_yard_rate ? '₹ ' . rtrim(rtrim(number_format($showing->property->sq_yard_rate, 2), '0'), '.') : 'N/A');
+                $sheet->setCellValue('E' . $row, optional($showing->salesPerson)->name ?? 'N/A');
+                $sheet->setCellValue('F' . $row, optional($showing->customer)->name ?? 'N/A');
+                $sheet->setCellValue('G' . $row, optional($showing->show_date)->format('d/m/Y') ?? 'N/A');
                 
                 // Alignments
                 $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $sheet->getStyle('E' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('G' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 
                 $row++;
             }
 
             // Auto-size columns
-            foreach (range('A', 'E') as $col) {
+            foreach (range('A', 'G') as $col) {
                 $sheet->getColumnDimension($col)->setAutoSize(true);
             }
 
@@ -128,6 +132,14 @@ class ReportController extends Controller
 
         if ($request->filled('property_id')) {
             $query->where('property_id', $request->property_id);
+        }
+
+        if ($request->filled('rate')) {
+            $rate = $request->rate;
+            $query->whereHas('property', function ($q) use ($rate) {
+                $q->where('sq_yard_rate', 'like', "%{$rate}%")
+                  ->orWhere('price', 'like', "%{$rate}%");
+            });
         }
 
         return $query;

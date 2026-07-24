@@ -249,6 +249,9 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="filter-item" style="flex: 1 1 150px;">
+                    <input type="text" name="rate" id="filter-rate" class="form-control premium-input" placeholder="Filter by Rate" value="{{ request('rate') }}">
+                </div>
                 <div class="filter-actions">
                     <button type="button" class="btn btn-premium-action btn-premium-reset" id="reset-btn">
                         <i class="bx bx-reset"></i> Reset
@@ -314,16 +317,22 @@
         document.getElementById('filter-salesperson').addEventListener('change', refreshTable);
         document.getElementById('filter-customer').addEventListener('change', refreshTable);
         document.getElementById('filter-property').addEventListener('change', refreshTable);
+        document.getElementById('filter-rate').addEventListener('input', function() {
+            clearTimeout(this._timer);
+            this._timer = setTimeout(refreshTable, 400);
+        });
 
         document.getElementById('reset-btn').addEventListener('click', function() {
             document.getElementById('filter-salesperson').value = '';
             document.getElementById('filter-customer').value = '';
             document.getElementById('filter-property').value = '';
+            document.getElementById('filter-rate').value = '';
             
             const url = new URL(window.location);
             url.searchParams.delete('sales_person_id');
             url.searchParams.delete('customer_id');
             url.searchParams.delete('property_id');
+            url.searchParams.delete('rate');
             window.history.replaceState({}, '', url);
             
             refreshTable();

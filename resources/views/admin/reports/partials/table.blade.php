@@ -3,6 +3,8 @@
         <thead>
             <tr>
                 <th>Property Name</th>
+                <th>Build Type</th>
+                <th>Rate</th>
                 <th>Salesperson</th>
                 <th>Customer</th>
                 <th>Show Date</th>
@@ -15,6 +17,20 @@
                         <span class="fw-semibold text-dark">{{ optional($showing->property)->title ?? 'N/A' }}</span>
                         @if(optional($showing->property)->location)
                             <small class="text-muted d-block"><i class="bx bx-map-pin fs-6"></i> {{ $showing->property->location }}</small>
+                        @endif
+                    </td>
+                    <td>
+                        @if(optional($showing->property)->build_type)
+                            <span class="badge bg-label-info">{{ $showing->property->build_type }}</span>
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>
+                        @if(optional($showing->property)->sq_yard_rate)
+                            ₹ {{ rtrim(rtrim(number_format($showing->property->sq_yard_rate, 2), '0'), '.') }}
+                        @else
+                            -
                         @endif
                     </td>
                     <td>
@@ -42,7 +58,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="text-center py-5 text-muted">
+                    <td colspan="6" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No property showings found matching the filter criteria.
                     </td>

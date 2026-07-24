@@ -4,6 +4,7 @@
             <tr>
                 <th style="width: 60px;">S.No.</th>
                 <th>Name</th>
+                <th>Build Type</th>
                 <th>Plot Number</th>
                 <th>Size</th>
                 <th>Rate</th>
@@ -18,6 +19,13 @@
                     </td>
                     <td>
                         <span class="fw-semibold text-dark">{{ $property->title }}</span>
+                    </td>
+                    <td>
+                        @if($property->build_type)
+                            <span class="badge bg-label-info">{{ $property->build_type }}</span>
+                        @else
+                            -
+                        @endif
                     </td>
                     <td>{{ $property->plot_number ?? '-' }}</td>
                     <td>
@@ -71,7 +79,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center py-5 text-muted">
+                    <td colspan="7" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No properties found matching the search criteria.
                     </td>
