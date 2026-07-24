@@ -45,7 +45,17 @@
 <div class="form-section">
     <div class="form-section-title">Basic Information</div>
     <div class="row g-3">
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <label class="form-label form-label-premium" for="title">Title <span class="text-danger">*</span></label>
+            <input type="text" name="title" id="title" class="form-control premium-input @error('title') is-invalid @enderror" value="{{ old('title', $property->title) }}" placeholder="Enter title" required>
+            @error('title')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-4">
+            <label class="form-label form-label-premium" for="property_name">Property Name</label>
+            <input type="text" name="property_name" id="property_name" class="form-control premium-input @error('property_name') is-invalid @enderror" value="{{ old('property_name', $property->property_name) }}" placeholder="Enter property name">
+            @error('property_name')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-4">
             <label class="form-label form-label-premium" for="sales_person_ids">Sales Person <a href="{{ url('admin/salespersons') }}" style="font-weight:400;font-size:.75rem;">(add)</a></label>
             <select name="sales_person_ids[]" id="sales_person_ids" class="form-select premium-select @error('sales_person_ids') is-invalid @enderror" multiple>
                 @foreach($salespersons as $sp)
@@ -53,11 +63,6 @@
                 @endforeach
             </select>
             @error('sales_person_ids')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
-        <div class="col-md-4">
-            <label class="form-label form-label-premium" for="title">Property Name </label>
-            <input type="text" name="title" id="title" class="form-control premium-input @error('title') is-invalid @enderror" value="{{ old('title', $property->title) }}" placeholder="Enter property name">
-            @error('title')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-4">
             <label class="form-label form-label-premium" for="property_type">Property Brokers</label>
@@ -124,9 +129,9 @@
             <label class="form-label form-label-premium" for="build_type">Build Type</label>
             <select name="build_type" id="build_type" class="form-select premium-select @error('build_type') is-invalid @enderror">
                 <option value="">— Select —</option>
-                <option value="Plot" {{ old('build_type', $property->build_type) === 'Plot' ? 'selected' : '' }}>Plot</option>
-                <option value="Villa" {{ old('build_type', $property->build_type) === 'Villa' ? 'selected' : '' }}>Villa</option>
-                <option value="Shop" {{ old('build_type', $property->build_type) === 'Shop' ? 'selected' : '' }}>Shop</option>
+                @foreach(['Plot', 'Villa', 'Shop', 'Flat', 'Agriculture', 'Farmhouse'] as $btype)
+                    <option value="{{ $btype }}" {{ old('build_type', $property->build_type) === $btype ? 'selected' : '' }}>{{ $btype }}</option>
+                @endforeach
             </select>
             @error('build_type')<span class="error-text">{{ $message }}</span>@enderror
         </div>

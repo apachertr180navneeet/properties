@@ -107,7 +107,7 @@
         <div class="prop-header">
             <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
                 <div>
-                    <h5 class="prop-title">{{ $property->title }}</h5>
+                    <h5 class="prop-title">{{ $property->title }} @if($property->property_name)<small class="text-muted fs-6">({{ $property->property_name }})</small>@endif</h5>
                     <p class="prop-subtitle">
                         <i class="bx bx-calendar"></i> Created {{ $property->created_at->format('d M Y') }}
                         &middot; ID #{{ $property->id }}

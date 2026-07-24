@@ -13,6 +13,7 @@ class Property extends Model
     protected $fillable = [
         'sales_person_id',
         'title',
+        'property_name',
         'owner_name',
         'owner_phone',
         'property_type',

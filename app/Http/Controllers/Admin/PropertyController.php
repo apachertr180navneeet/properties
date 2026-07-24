@@ -214,6 +214,7 @@ class PropertyController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('property_name', 'like', "%{$search}%")
                     ->orWhere('plot_number', 'like', "%{$search}%")
                     ->orWhere('area_size', 'like', "%{$search}%")
                     ->orWhere('sq_yard_rate', 'like', "%{$search}%")
@@ -253,6 +254,7 @@ class PropertyController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'title' => 'required|string|max:255',
+                'property_name' => 'nullable|string|max:255',
                 'owner_name' => 'nullable|string|max:255',
                 'owner_phone' => 'nullable|string|max:20',
                 'property_type' => 'nullable|string|max:255',
@@ -279,7 +281,7 @@ class PropertyController extends Controller
                 'registry_owner' => 'nullable|string|max:255',
                 'setup_type' => 'nullable|in:Fully Furnished,Semi Furnished,Maintained',
                 'add_on_date' => 'nullable|date',
-                'build_type' => 'nullable|in:Plot,Villa,Shop',
+                'build_type' => 'nullable|in:Plot,Villa,Shop,Flat,Agriculture,Farmhouse',
                 'property_condition' => 'nullable|in:Used,Unused',
                 'construction_type' => 'nullable|in:New,Old',
                 'property_age' => 'nullable|string|max:255',
@@ -299,6 +301,7 @@ class PropertyController extends Controller
 
             $data = $request->only([
                 'title',
+                'property_name',
                 'owner_name',
                 'owner_phone',
                 'property_type',
