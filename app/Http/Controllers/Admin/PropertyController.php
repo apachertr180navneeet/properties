@@ -214,6 +214,9 @@ class PropertyController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('plot_number', 'like', "%{$search}%")
+                    ->orWhere('area_size', 'like', "%{$search}%")
+                    ->orWhere('sq_yard_rate', 'like', "%{$search}%")
                     ->orWhere('owner_name', 'like', "%{$search}%")
                     ->orWhere('property_type', 'like', "%{$search}%")
                     ->orWhere('city', 'like', "%{$search}%")

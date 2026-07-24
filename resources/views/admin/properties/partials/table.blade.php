@@ -4,12 +4,10 @@
             <tr>
                 <th style="width: 60px;">S.No.</th>
                 <th>Name</th>
-                <th>Owner Name</th>
-                <th>Owner Phone</th>
-                <th>Amount</th>
-                <th>Sales Person</th>
-                <th>Status</th>
-                <th style="width: 180px;">Action</th>
+                <th>Plot Number</th>
+                <th>Size</th>
+                <th>Rate</th>
+                <th>Status & Action</th>
             </tr>
         </thead>
         <tbody>
@@ -21,49 +19,59 @@
                     <td>
                         <span class="fw-semibold text-dark">{{ $property->title }}</span>
                     </td>
-                    <td>{{ $property->owner_name ?? '-' }}</td>
-                    <td>{{ $property->owner_phone ?? '-' }}</td>
+                    <td>{{ $property->plot_number ?? '-' }}</td>
                     <td>
-                        @if($property->price)
-                            {{ rtrim(rtrim(number_format($property->price / 100000, 2), '0'), '.') }}L
+                        @if($property->area_size)
+                            {{ rtrim(rtrim(number_format($property->area_size, 2), '0'), '.') }} {{ $property->area_unit ?? '' }}
+                            @if($property->length || $property->width)
+                                <small class="text-muted d-block">({{ $property->length ?? '-' }} x {{ $property->width ?? '-' }})</small>
+                            @endif
+                        @elseif($property->length || $property->width)
+                            {{ $property->length ?? '-' }} x {{ $property->width ?? '-' }}
                         @else
                             -
                         @endif
                     </td>
-                    <td>{{ optional($property->salesPerson)->name ?? '-' }}</td>
                     <td>
-                        <div class="d-flex gap-1 status-toggle-group" data-id="{{ $property->id }}">
-                            @foreach(['available', 'sold', 'pending'] as $st)
-                                <span class="badge status-pill {{ $property->status === $st ? 'bg-label-success' : 'bg-label-light' }}"
-                                      data-status="{{ $st }}"
-                                      style="cursor: pointer; padding: .35em .65em; font-size: .75rem; border-radius: 50px; transition: all .15s;"
-                                      onclick="changeStatus(this, {{ $property->id }}, '{{ $st }}')">
-                                    {{ ucfirst($st) }}
-                                </span>
-                            @endforeach
-                        </div>
+                        @if($property->sq_yard_rate)
+                            ₹ {{ rtrim(rtrim(number_format($property->sq_yard_rate, 2), '0'), '.') }}
+                        @else
+                            -
+                        @endif
                     </td>
                     <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <a href="{{ route('admin.properties.show', $property->id) }}" class="btn btn-sm btn-outline-info action-btn-edit">
-                                <i class="bx bx-show"></i> View
-                            </a>
-                            <a href="{{ route('admin.properties.edit', $property->id) }}" class="btn btn-sm btn-outline-warning action-btn-edit">
-                                <i class="bx bx-edit-alt"></i> Edit
-                            </a>
-                            <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-inline delete-form-{{ $property->id }}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-sm btn-outline-danger action-btn-delete" onclick="confirmDelete({{ $property->id }}, '{{ addslashes($property->title) }}')">
-                                    <i class="bx bx-trash"></i> Delete
-                                </button>
-                            </form>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="d-flex gap-1 status-toggle-group" data-id="{{ $property->id }}">
+                                @foreach(['available', 'sold', 'pending'] as $st)
+                                    <span class="badge status-pill {{ $property->status === $st ? 'bg-label-success' : 'bg-label-light' }}"
+                                          data-status="{{ $st }}"
+                                          style="cursor: pointer; padding: .35em .65em; font-size: .75rem; border-radius: 50px; transition: all .15s;"
+                                          onclick="changeStatus(this, {{ $property->id }}, '{{ $st }}')">
+                                        {{ ucfirst($st) }}
+                                    </span>
+                                @endforeach
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <a href="{{ route('admin.properties.show', $property->id) }}" class="btn btn-sm btn-outline-info action-btn-edit">
+                                    <i class="bx bx-show"></i> View
+                                </a>
+                                <a href="{{ route('admin.properties.edit', $property->id) }}" class="btn btn-sm btn-outline-warning action-btn-edit">
+                                    <i class="bx bx-edit-alt"></i> Edit
+                                </a>
+                                <form action="{{ route('admin.properties.destroy', $property->id) }}" method="POST" class="d-inline delete-form-{{ $property->id }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-sm btn-outline-danger action-btn-delete" onclick="confirmDelete({{ $property->id }}, '{{ addslashes($property->title) }}')">
+                                        <i class="bx bx-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8" class="text-center py-5 text-muted">
+                    <td colspan="6" class="text-center py-5 text-muted">
                         <i class="bx bx-info-circle fs-3 mb-2 d-block text-secondary"></i>
                         No properties found matching the search criteria.
                     </td>
