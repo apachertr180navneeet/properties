@@ -137,8 +137,8 @@ class ReportController extends Controller
         if ($request->filled('rate')) {
             $rate = $request->rate;
             $query->whereHas('property', function ($q) use ($rate) {
-                $q->where('sq_yard_rate', 'like', "%{$rate}%")
-                  ->orWhere('price', 'like', "%{$rate}%");
+                $q->where('sq_yard_rate', '=', $rate)
+                  ->orWhere('price', '=', $rate);
             });
         }
 

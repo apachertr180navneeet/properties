@@ -241,8 +241,8 @@ class PropertyController extends Controller
         if ($request->filled('rate')) {
             $rate = $request->rate;
             $query->where(function ($q) use ($rate) {
-                $q->where('sq_yard_rate', 'like', "%{$rate}%")
-                  ->orWhere('price', 'like', "%{$rate}%");
+                $q->where('sq_yard_rate', '=', $rate)
+                  ->orWhere('price', '=', $rate);
             });
         }
 
