@@ -288,12 +288,22 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('run-migration', function () {
-        try {
-            Artisan::call('migrate', ['--force' => true]);
-            return response(Artisan::output());
-        } catch (\Throwable $e) {
-            return response('Migration failed: ' . $e->getMessage(), 500);
-        }
-    })->name('run.migration');
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return response(Artisan::output());
+    } catch (\Throwable $e) {
+        return response('Migration failed: ' . $e->getMessage(), 500);
+    }
+})->name('run.migration');
+
+Route::get('run-whatsapp-scheduler', function () {
+    try {
+        Artisan::call('whatsapp:send-due-messages');
+        return response('<pre>' . Artisan::output() . '</pre>');
+    } catch (\Throwable $e) {
+        return response('Scheduler failed: ' . $e->getMessage(), 500);
+    }
+})->name('run.whatsapp-scheduler');
+
 
 
