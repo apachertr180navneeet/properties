@@ -126,7 +126,7 @@ class PropertyController extends Controller
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $sheet->setCellValue('A1', 'S.No');
-            $sheet->setCellValue('B1', 'Title');
+            $sheet->setCellValue('B1', 'Property Name');
             $sheet->setCellValue('C1', 'Owner Name');
             $sheet->setCellValue('D1', 'Owner Phone');
             $sheet->setCellValue('E1', 'Type');
@@ -154,7 +154,7 @@ class PropertyController extends Controller
             $row = 2;
             foreach ($properties as $i => $property) {
                 $sheet->setCellValue('A' . $row, $i + 1);
-                $sheet->setCellValue('B' . $row, $property->title);
+                $sheet->setCellValue('B' . $row, $property->property_name ?: $property->title);
                 $sheet->setCellValue('C' . $row, $property->owner_name);
                 $sheet->setCellValue('D' . $row, $property->owner_phone);
                 $sheet->setCellValue('E' . $row, $property->property_type);

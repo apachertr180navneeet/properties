@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th style="width: 60px;">S.No.</th>
-                <th>Name</th>
+                <th>Property Name</th>
                 <!--<th>Build Type</th>-->
                 <th>Plot Number</th>
                 <th>Size</th>
@@ -18,7 +18,7 @@
                         <span class="text-muted fw-semibold">{{ $properties->firstItem() + $loop->index }}</span>
                     </td>
                     <td>
-                        <span class="fw-semibold text-dark">{{ $property->title }}</span>
+                        <span class="fw-semibold text-dark">{{ $property->property_name ?: ($property->property_name ?? '-') }}</span>
                     </td>
                     <!--<td>-->
                     <!--    @if($property->build_type)-->
@@ -32,10 +32,10 @@
                         @if($property->area_size)
                             {{ rtrim(rtrim(number_format($property->area_size, 2), '0'), '.') }} {{ $property->area_unit ?? '' }}
                             @if($property->length || $property->width)
-                                <small class="text-muted d-block">({{ $property->length ?? '-' }} x {{ $property->width ?? '-' }})</small>
+                                <small class="text-muted d-block">({{ $property->width ?? '-' }} x {{ $property->length ?? '-' }})</small>
                             @endif
                         @elseif($property->length || $property->width)
-                            {{ $property->length ?? '-' }} x {{ $property->width ?? '-' }}
+                            {{ $property->width ?? '-' }} x {{ $property->length ?? '-' }}
                         @else
                             -
                         @endif
