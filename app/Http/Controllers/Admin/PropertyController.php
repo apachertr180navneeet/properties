@@ -147,9 +147,10 @@ class PropertyController extends Controller
             $sheet->setCellValue('U1', 'Registry Owner');
             $sheet->setCellValue('V1', 'Setup Type');
             $sheet->setCellValue('W1', 'Construction Type');
-            $sheet->setCellValue('X1', 'Property Age');
-            $sheet->setCellValue('Y1', 'Sales Person');
-            $sheet->setCellValue('Z1', 'Status');
+            $sheet->setCellValue('X1', 'Construction Area');
+            $sheet->setCellValue('Y1', 'Property Age');
+            $sheet->setCellValue('Z1', 'Sales Person');
+            $sheet->setCellValue('AA1', 'Status');
 
             $row = 2;
             foreach ($properties as $i => $property) {
@@ -175,9 +176,10 @@ class PropertyController extends Controller
                 $sheet->setCellValue('U' . $row, $property->registry_owner);
                 $sheet->setCellValue('V' . $row, $property->setup_type);
                 $sheet->setCellValue('W' . $row, $property->construction_type);
-                $sheet->setCellValue('X' . $row, $property->property_age);
-                $sheet->setCellValue('Y' . $row, $property->salesPersons->pluck('name')->implode(', '));
-                $sheet->setCellValue('Z' . $row, ucfirst($property->status ?? 'available'));
+                $sheet->setCellValue('X' . $row, $property->construction_area);
+                $sheet->setCellValue('Y' . $row, $property->property_age);
+                $sheet->setCellValue('Z' . $row, $property->salesPersons->pluck('name')->implode(', '));
+                $sheet->setCellValue('AA' . $row, ucfirst($property->status ?? 'available'));
                 $row++;
             }
 
@@ -220,6 +222,8 @@ class PropertyController extends Controller
                     ->orWhere('sq_yard_rate', 'like', "%{$search}%")
                     ->orWhere('owner_name', 'like', "%{$search}%")
                     ->orWhere('property_type', 'like', "%{$search}%")
+                    ->orWhere('build_type', 'like', "%{$search}%")
+                    ->orWhere('construction_area', 'like', "%{$search}%")
                     ->orWhere('city', 'like', "%{$search}%")
                     ->orWhere('location', 'like', "%{$search}%")
                     ->orWhere('via', 'like', "%{$search}%")
@@ -282,6 +286,7 @@ class PropertyController extends Controller
                 'setup_type' => 'nullable|in:Fully Furnished,Semi Furnished,Maintained',
                 'add_on_date' => 'nullable|date',
                 'build_type' => 'nullable|in:Plot,Villa,Shop,Flat,Agriculture,Farmhouse',
+                'construction_area' => 'nullable|string|max:255',
                 'property_condition' => 'nullable|in:Used,Unused',
                 'construction_type' => 'nullable|in:New,Old',
                 'property_age' => 'nullable|string|max:255',
@@ -327,6 +332,7 @@ class PropertyController extends Controller
                 'setup_type',
                 'add_on_date',
                 'build_type',
+                'construction_area',
                 'property_condition',
                 'construction_type',
                 'property_age',

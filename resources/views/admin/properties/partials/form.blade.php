@@ -91,15 +91,14 @@
             @error('plot_number')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-3">
-            <label class="form-label form-label-premium" for="length">Length (L)</label>
-            <input type="number" step="0.01" min="0" name="length" id="length" class="form-control premium-input @error('length') is-invalid @enderror" value="{{ old('length', $property->length) }}" placeholder="e.g. 20">
-            @error('length')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
-
-        <div class="col-md-3">
             <label class="form-label form-label-premium" for="width">Width (W)</label>
             <input type="number" step="0.01" min="0" name="width" id="width" class="form-control premium-input @error('width') is-invalid @enderror" value="{{ old('width', $property->width) }}" placeholder="e.g. 45">
             @error('width')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-3">
+            <label class="form-label form-label-premium" for="length">Length (L)</label>
+            <input type="number" step="0.01" min="0" name="length" id="length" class="form-control premium-input @error('length') is-invalid @enderror" value="{{ old('length', $property->length) }}" placeholder="e.g. 20">
+            @error('length')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-3">
             <label class="form-label form-label-premium" for="area_unit">Unit</label>
@@ -134,6 +133,16 @@
                 @endforeach
             </select>
             @error('build_type')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-4">
+            <label class="form-label form-label-premium" for="construction_area">Construction Area</label>
+            <select name="construction_area" id="construction_area" class="form-select premium-select @error('construction_area') is-invalid @enderror">
+                <option value="">— Select —</option>
+                @foreach(['Single story', 'Dead story', 'Double story', 'Dhai story', 'Teen story'] as $carea)
+                    <option value="{{ $carea }}" {{ old('construction_area', $property->construction_area) === $carea ? 'selected' : '' }}>{{ $carea }}</option>
+                @endforeach
+            </select>
+            @error('construction_area')<span class="error-text">{{ $message }}</span>@enderror
         </div>
         <div class="col-md-4">
             <label class="form-label form-label-premium" for="property_age">Property Age</label>

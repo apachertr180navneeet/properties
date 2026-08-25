@@ -228,10 +228,10 @@
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="info-card">
-                        <div class="label">Dimensions (L X W)</div>
+                        <div class="label">Dimensions (W X L)</div>
                         <div class="value">
                             @if($property->length || $property->width)
-                                {{ $property->length ?? '-' }} X {{ $property->width ?? '-' }}
+                                {{ $property->width ?? '-' }} X {{ $property->length ?? '-' }}
                             @else
                                 -
                             @endif
@@ -272,6 +272,12 @@
                     <div class="info-card">
                         <div class="label">Construction Type</div>
                         <div class="value">{{ $property->construction_type ?? '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="info-card">
+                        <div class="label">Construction Area</div>
+                        <div class="value">{{ $property->construction_area ?? '-' }}</div>
                     </div>
                 </div>
                 <div class="col-md-3">

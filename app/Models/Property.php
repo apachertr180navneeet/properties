@@ -43,6 +43,7 @@ class Property extends Model
         'build_type',
         'property_condition',
         'construction_type',
+        'construction_area',
         'property_age',
         'property_photo',
         'registry_document',
