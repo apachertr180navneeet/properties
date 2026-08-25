@@ -60,7 +60,7 @@ $salespersons = $query->orderBy('status', 'asc')->orderBy('name', 'asc')->pagina
                 'email' => 'nullable|email',
                 'phone' => 'required|string|digits:10|unique:sales_persons,phone',
                 'phone_2' => 'nullable|string|digits:10',
-                'city' => 'required|string|max:255',
+                'city' => 'nullable|string|max:255',
             ]);
 
             if ($validator->fails()) {
@@ -120,7 +120,7 @@ $salespersons = $query->orderBy('status', 'asc')->orderBy('name', 'asc')->pagina
                 'email' => 'nullable|email',
                 'phone' => 'required|string|digits:10|unique:sales_persons,phone,' . $id,
                 'phone_2' => 'nullable|string|digits:10',
-                'city' => 'required|string|max:255',
+                'city' => 'nullable|string|max:255',
             ]);
 
             if ($validator->fails()) {
