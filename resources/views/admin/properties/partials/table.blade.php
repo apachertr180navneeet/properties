@@ -4,7 +4,7 @@
             <tr>
                 <th style="width: 60px;">S.No.</th>
                 <th>Name</th>
-                <th>Build Type</th>
+                <!--<th>Build Type</th>-->
                 <th>Plot Number</th>
                 <th>Size</th>
                 <th>Rate</th>
@@ -20,13 +20,13 @@
                     <td>
                         <span class="fw-semibold text-dark">{{ $property->title }}</span>
                     </td>
-                    <td>
-                        @if($property->build_type)
-                            <span class="badge bg-label-info">{{ $property->build_type }}</span>
-                        @else
-                            -
-                        @endif
-                    </td>
+                    <!--<td>-->
+                    <!--    @if($property->build_type)-->
+                    <!--        <span class="badge bg-label-info">{{ $property->build_type }}</span>-->
+                    <!--    @else-->
+                    <!--        --->
+                    <!--    @endif-->
+                    <!--</td>-->
                     <td>{{ $property->plot_number ?? '-' }}</td>
                     <td>
                         @if($property->area_size)
