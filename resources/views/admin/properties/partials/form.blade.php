@@ -46,11 +46,6 @@
     <div class="form-section-title">Basic Information</div>
     <div class="row g-3">
         <div class="col-md-4">
-            <label class="form-label form-label-premium" for="title">Title <span class="text-danger">*</span></label>
-            <input type="text" name="title" id="title" class="form-control premium-input @error('title') is-invalid @enderror" value="{{ old('title', $property->title) }}" placeholder="Enter title" required>
-            @error('title')<span class="error-text">{{ $message }}</span>@enderror
-        </div>
-        <div class="col-md-4">
             <label class="form-label form-label-premium" for="property_name">Property Name</label>
             <input type="text" name="property_name" id="property_name" class="form-control premium-input @error('property_name') is-invalid @enderror" value="{{ old('property_name', $property->property_name) }}" placeholder="Enter property name">
             @error('property_name')<span class="error-text">{{ $message }}</span>@enderror
@@ -58,8 +53,20 @@
         <div class="col-md-4">
             <label class="form-label form-label-premium" for="sales_person_ids">Sales Person <a href="{{ url('admin/salespersons') }}" style="font-weight:400;font-size:.75rem;">(add)</a></label>
             <select name="sales_person_ids[]" id="sales_person_ids" class="form-select premium-select @error('sales_person_ids') is-invalid @enderror" multiple>
+                @php
+                    if (old('sales_person_ids') !== null) {
+                        $selectedSalesPersons = array_map('strval', (array) old('sales_person_ids'));
+                    } elseif ($property->exists) {
+                        $selectedSalesPersons = $property->salesPersons->pluck('id')->map(fn($id) => (string) $id)->toArray();
+                    } else {
+                        $defaultSalesPerson = $salespersons->first(function($sp) {
+                            return strcasecmp(trim($sp->name), 'Paresh Rawtani') === 0;
+                        });
+                        $selectedSalesPersons = $defaultSalesPerson ? [(string)$defaultSalesPerson->id] : ['26'];
+                    }
+                @endphp
                 @foreach($salespersons as $sp)
-                    <option value="{{ $sp->id }}" {{ in_array($sp->id, old('sales_person_ids', $property->salesPersons->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>{{ $sp->name }}</option>
+                    <option value="{{ $sp->id }}" {{ in_array((string)$sp->id, $selectedSalesPersons) ? 'selected' : '' }}>{{ $sp->name }}</option>
                 @endforeach
             </select>
             @error('sales_person_ids')<span class="error-text">{{ $message }}</span>@enderror
@@ -77,6 +84,11 @@
                 @endforeach
             </select>
             @error('property_category')<span class="error-text">{{ $message }}</span>@enderror
+        </div>
+        <div class="col-md-4">
+            <label class="form-label form-label-premium" for="title">Title</label>
+            <input type="text" name="title" id="title" class="form-control premium-input @error('title') is-invalid @enderror" value="{{ old('title', $property->title) }}" placeholder="Enter title">
+            @error('title')<span class="error-text">{{ $message }}</span>@enderror
         </div>
     </div>
 </div>

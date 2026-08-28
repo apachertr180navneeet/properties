@@ -257,7 +257,7 @@ class PropertyController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'title' => 'required|string|max:255',
+                'title' => 'nullable|string|max:255',
                 'property_name' => 'nullable|string|max:255',
                 'owner_name' => 'nullable|string|max:255',
                 'owner_phone' => 'nullable|string|max:20',
@@ -352,6 +352,8 @@ class PropertyController extends Controller
             $data['sales_person_id'] = !empty($salesPersonIds) ? $salesPersonIds[0] : null;
 
             $oldSalesPersonIds = $property->salesPersons()->pluck('sales_person_id')->toArray();
+
+            $data['title'] = $data['title'] ?? ($data['property_name'] ?? '');
 
             $property->fill($data);
             $property->save();
